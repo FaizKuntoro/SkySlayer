@@ -18,6 +18,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 class GameScreen implements Screen {
 
+
+    //Instansi kelas untuk kamera dan viewport
+
     private Camera camera;
     private Viewport viewport;
     private SpriteBatch batch;

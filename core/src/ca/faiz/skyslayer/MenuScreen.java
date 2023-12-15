@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -15,77 +16,134 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 class MenuScreen implements Screen {
-    private Stage stage;
+
+
+    // Kamera dan Viewport
     private Camera camera;
     private Viewport viewport;
-    private SpriteBatch batch;
-    private Texture[] backgrounds;
-    private Texture background, logo, circle, background1;
-
-    private float[] backgroundsoffsets = {0};
     private float backgroundmaxscrollingspeed;
+
+
+    // Texture untuk Ui dan backgrounds
+    private Texture[] backgrounds;
+    private Texture background, logo, circle ;
+    private float[] backgroundsoffsets = {0};
+
+
+    //  Untuk memberikan animasi dan efek pada Texture
+    private Stage stage;
+    private SpriteBatch batch;
     private int backgroundoffset;
-
-
-
+    private Label playLabel, KelompokLabel;
     private Sprite sprite;
 
+
+    // Variabel konstan untuk Lebar dan Panjang Screen
     private final int WORLD_WITH = 650;
     private final int WORLD_HEIGHT = 1000;
 
-
     public MenuScreen() {
+
+
+        //meginstasikan obejct sprite dari class Sprite
+        sprite = new Sprite();
+        batch = new SpriteBatch();
+        camera = new OrthographicCamera();
+        backgroundmaxscrollingspeed = (float)(WORLD_HEIGHT) / 4;
 
         stage = new Stage(new FitViewport(WORLD_WITH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
+        Skin skin = new Skin(Gdx.files.internal("arcade-ui.json"));
 
-        batch = new SpriteBatch();
-        camera = new OrthographicCamera();
+
+        // membuat label untuk Button Play
+        playLabel = new Label("Play", skin);
+        playLabel.setSize(190, 30);
+        playLabel.setPosition((WORLD_WITH + 230) / 2, ((WORLD_HEIGHT / 5)));
+
+        // membuat label untuk Button Kelompok
+        KelompokLabel = new Label("Kelompok", skin);
+        KelompokLabel.setSize(190, 30);
+        KelompokLabel.setPosition((WORLD_WITH - 440) / 2, ((WORLD_HEIGHT / 5)));
+
+
         viewport = new StretchViewport(WORLD_WITH, WORLD_HEIGHT, camera);
+
+        // Object untuk gambar
+        logo = new Texture("sky1.png");
+        circle = new Texture("circle.png");
         background = new Texture("bg1alt.png");
 
+
+        // Menginstasikan Array untuk efek backgrounds
         backgrounds = new Texture[1];
         backgrounds[0] = new Texture("bintang02.png");
 
-
-        backgroundmaxscrollingspeed = (float)(WORLD_HEIGHT) / 4;
-
-        background1 = new Texture("bg4.png");
-        logo = new Texture("sky1.png");
-        circle = new Texture("circle.png");
+        // membuat efek background
         backgroundoffset = 0;
         sprite = new Sprite(circle);
         sprite.setPosition(WORLD_WITH / 2 - sprite.getWidth() / 2,
                 ((WORLD_HEIGHT / 9*7) - sprite.getHeight()/2));
 
+
+        // Membuat button untuk ikon Play
         ImageButton playButton = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("play.png"))));
         playButton.setSize(190, 190);
         playButton.setPosition( (WORLD_WITH + 100 )/ 2 ,
                 ((WORLD_HEIGHT / 2) - sprite.getHeight()/2));
 
+        // Respon input dari user berupa (click, hover)
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 // Switch to the GameScreen when the play button is clicked
                 skyslayer.getInstance().setScreen(new GameScreen());
             }
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                // Switch to the GameScreen when the play button is clicked
+                stage.addActor(playLabel); // Add the label when mouse enters the button
+            }
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                playLabel.remove(); // Remove the label when mouse exits the button
+            }
+
         });
 
+        // Membuat Label dari ikon Kelompok
         ImageButton listkel = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("listkel.png"))));
         listkel.setSize(200, 200);
         listkel.setPosition( WORLD_WITH / 2 - sprite.getWidth() / 2,
                 ((WORLD_HEIGHT / 2) - sprite.getHeight()/2));
 
+        // Respon input dari user berupa (click, hover)
         listkel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 // Switch to the GameScreen when the play button is clicked
                 skyslayer.getInstance().setScreen(new KelompokScreen());
             }
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                stage.addActor(KelompokLabel);
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                KelompokLabel.remove();
+            }
+
+
         });
 
+        // Memanggil Label
         stage.addActor(playButton);
         stage.addActor(listkel);
     }
@@ -98,9 +156,7 @@ class MenuScreen implements Screen {
     @Override
     public void render(float deltaTime) {
 
-
-
-
+        // Membuat Efek Background
         backgroundoffset++;
         if(backgroundoffset % WORLD_HEIGHT == 0 ){
             backgroundoffset = 0;
@@ -108,6 +164,7 @@ class MenuScreen implements Screen {
 
         }
 
+        // Membuat render
         batch.begin();
         stage.act(deltaTime);
         stage.draw();
@@ -126,6 +183,9 @@ class MenuScreen implements Screen {
 
     private void renderBackground(float deltaTime) {
 
+        // Background array efek
+
+        
         backgroundsoffsets[0] += deltaTime * backgroundmaxscrollingspeed / 1 ;
 
 
