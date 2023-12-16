@@ -7,9 +7,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -28,7 +31,7 @@ class KelompokScreen implements Screen {
     private float backgroundmaxscrollingspeed;
     private int backgroundoffset;
 
-
+    private Label BackLabel;
 
     private Sprite sprite;
 
@@ -40,6 +43,13 @@ class KelompokScreen implements Screen {
 
         stage = new Stage(new FitViewport(WORLD_WITH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
+
+
+        Skin skin = new Skin(Gdx.files.internal("arcade-ui.json"));
+        BackLabel = new Label("Back" , skin);
+        BackLabel.setSize(100 , 20);
+        BackLabel.setPosition(25 ,
+                WORLD_HEIGHT -138);
 
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
@@ -57,34 +67,31 @@ class KelompokScreen implements Screen {
 
         backgroundoffset = 0;
 
-        ImageButton playButton = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("back.png"))));
-        playButton.setSize(95, 95);
-        playButton.setPosition( 120 ,
+        ImageButton BackButton = new ImageButton(new TextureRegionDrawable
+                (new Texture(Gdx.files.internal("back.png"))));
+        BackButton.setSize(95, 95);
+        BackButton.setPosition( 10 ,
                 ((WORLD_HEIGHT -110)));
 
-        playButton.addListener(new ClickListener() {
+        BackButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Switch to the GameScreen when the play button is clicked
                 skyslayer.getInstance().setScreen(new MenuScreen());
+            }
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                stage.addActor(BackLabel);
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                BackLabel.remove();
             }
         });
 
-        ImageButton listkel = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("listkel.png"))));
-        listkel.setSize(100, 100);
-        listkel.setPosition( 10,
-                ((WORLD_HEIGHT -110 )));
+        stage.addActor(BackButton);
 
-        listkel.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                // Switch to the GameScreen when the play button is clicked
-                skyslayer.getInstance().setScreen(new MenuScreen());
-            }
-        });
-
-        stage.addActor(playButton);
-        stage.addActor(listkel);
     }
 
     @Override
@@ -111,6 +118,7 @@ class KelompokScreen implements Screen {
         renderBackground(deltaTime);
         batch.draw(kelompokbg,WORLD_WITH / 2 - sprite.getWidth() / 2 - 325,
                 ((WORLD_HEIGHT / 10 ) - sprite.getHeight()/2) - 170);
+        stage.act();
         stage.draw();
         batch.end();
 

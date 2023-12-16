@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
+
 class MenuScreen implements Screen {
 
 
@@ -53,9 +54,8 @@ class MenuScreen implements Screen {
         sprite = new Sprite();
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
-        backgroundmaxscrollingspeed = (float)(WORLD_HEIGHT) / 4;
-
         stage = new Stage(new FitViewport(WORLD_WITH, WORLD_HEIGHT));
+        backgroundmaxscrollingspeed = (float)(WORLD_HEIGHT) / 4;
         Gdx.input.setInputProcessor(stage);
         Skin skin = new Skin(Gdx.files.internal("arcade-ui.json"));
 
@@ -91,7 +91,8 @@ class MenuScreen implements Screen {
 
 
         // Membuat button untuk ikon Play
-        ImageButton playButton = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("play.png"))));
+        ImageButton playButton = new ImageButton
+                (new TextureRegionDrawable(new Texture(("play.png"))));
         playButton.setSize(190, 190);
         playButton.setPosition( (WORLD_WITH + 100 )/ 2 ,
                 ((WORLD_HEIGHT / 2) - sprite.getHeight()/2));
@@ -100,24 +101,23 @@ class MenuScreen implements Screen {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Switch to the GameScreen when the play button is clicked
                 skyslayer.getInstance().setScreen(new GameScreen());
             }
 
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                // Switch to the GameScreen when the play button is clicked
-                stage.addActor(playLabel); // Add the label when mouse enters the button
+                stage.addActor(playLabel);
             }
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                playLabel.remove(); // Remove the label when mouse exits the button
+                playLabel.remove();
             }
 
         });
 
         // Membuat Label dari ikon Kelompok
-        ImageButton listkel = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("listkel.png"))));
+        ImageButton listkel = new ImageButton
+                (new TextureRegionDrawable(new Texture(("listkel.png"))));
         listkel.setSize(200, 200);
         listkel.setPosition( WORLD_WITH / 2 - sprite.getWidth() / 2,
                 ((WORLD_HEIGHT / 2) - sprite.getHeight()/2));
@@ -126,7 +126,6 @@ class MenuScreen implements Screen {
         listkel.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Switch to the GameScreen when the play button is clicked
                 skyslayer.getInstance().setScreen(new KelompokScreen());
             }
 
@@ -160,22 +159,27 @@ class MenuScreen implements Screen {
         backgroundoffset++;
         if(backgroundoffset % WORLD_HEIGHT == 0 ){
             backgroundoffset = 0;
-
-
         }
 
         // Membuat render
         batch.begin();
+
         stage.act(deltaTime);
         stage.draw();
+
         batch.draw(background, 0 , -backgroundoffset, WORLD_WITH, WORLD_HEIGHT);
         batch.draw(background, 0 , -backgroundoffset+WORLD_HEIGHT, WORLD_WITH, WORLD_HEIGHT);
+
         renderBackground(deltaTime);
+
         batch.draw(logo, WORLD_WITH / 2 - sprite.getWidth() / 2,
                 ((WORLD_HEIGHT / 9*7 ) - sprite.getHeight()/2));
         sprite.rotate(60 * deltaTime);
+
         sprite.draw(batch);
+
         stage.draw();
+
         batch.end();
 
 
@@ -184,10 +188,7 @@ class MenuScreen implements Screen {
     private void renderBackground(float deltaTime) {
 
         // Background array efek
-
-        
         backgroundsoffsets[0] += deltaTime * backgroundmaxscrollingspeed / 1 ;
-
 
         int layer;
         for (layer = 0; layer < backgroundsoffsets.length; layer++) {
@@ -205,7 +206,6 @@ class MenuScreen implements Screen {
     public void resize(int width, int height) {
         viewport.update(width, height, true);
         batch.setProjectionMatrix(camera.combined);
-
     }
 
     @Override
@@ -222,9 +222,21 @@ class MenuScreen implements Screen {
     public void hide() {
 
     }
-
     @Override
     public void dispose() {
+        // Dispose of resources to prevent memory leaks
 
+        // Dispose of textures
+        logo.dispose();
+        circle.dispose();
+        background.dispose();
+        for (Texture texture : backgrounds) {
+            texture.dispose();
+        }
+
+        // Dispose of sprite batch and stage
+        batch.dispose();
+        stage.dispose();
     }
+
 }

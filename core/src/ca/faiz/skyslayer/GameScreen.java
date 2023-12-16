@@ -45,6 +45,7 @@ class GameScreen implements Screen {
         camera = new OrthographicCamera();
         viewport = new StretchViewport(WORLD_WITH, WORLD_HEIGHT, camera);
         backgroundgame = new Texture("backgroundgame.png");
+
         Gdx.input.setInputProcessor(stage);
 
         backgrounds = new Texture[2];
@@ -53,7 +54,8 @@ class GameScreen implements Screen {
 
         backgroundmaxscrollingspeed = (float)(WORLD_HEIGHT) / 4;
 
-        ImageButton Back = new ImageButton(new TextureRegionDrawable(new Texture(Gdx.files.internal("back.png"))));
+        ImageButton Back = new ImageButton(new TextureRegionDrawable
+                (new Texture(Gdx.files.internal("back.png"))));
         Back.setSize(100, 100);
         Back.setPosition( 10 ,
                 ((WORLD_HEIGHT -110)));
@@ -142,6 +144,12 @@ class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        batch.dispose();
+        backgroundgame.dispose();
+        for (Texture background : backgrounds) {
+            background.dispose();
+        }
+        stage.dispose();
 
     }
 }
