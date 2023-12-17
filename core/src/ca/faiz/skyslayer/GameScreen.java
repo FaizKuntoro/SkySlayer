@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -17,18 +19,24 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import org.w3c.dom.Text;
+
 import java.security.PrivateKey;
+import java.util.LinkedList;
 
 class GameScreen implements Screen {
 
 
+    private TextureAtlas textureAtlas;
+    private TextureRegion textureRegion;
     //Instansi kelas untuk kamera dan viewport
 
     private Camera camera;
     private Viewport viewport;
     private SpriteBatch batch;
     private Texture[] backgrounds;
-    private Texture backgroundgame, enemyshipT, shipT, shipshield;
+    private Texture backgroundgame, EnemyShipTexture, PlayerShipTexture, PlayerShieldTexture,
+            PlayerLaserTexture, EnemyLaserTexture;
 
     private float[] backgroundsoffsets = {0,0};
     private float backgroundmaxscrollingspeed;
@@ -44,16 +52,21 @@ class GameScreen implements Screen {
     private Ship playership;
     private  Ship enemyship;
 
+    private LinkedList<Laser> playerLaserlist;
+    private LinkedList<Laser> enemyLaserlist;
+
     public GameScreen() {
 
         stage = new Stage();
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         viewport = new StretchViewport(WORLD_WITH, WORLD_HEIGHT, camera);
-        backgroundgame = new Texture("backgroundgame.png");
-        enemyshipT= new Texture("enemyship1.png");
-        shipT = new Texture("ship.png");
 
+        backgroundgame = new Texture("backgroundgame.png");
+        EnemyShipTexture = new Texture("enemyship1.png");
+        PlayerShipTexture = new Texture("ship.png");
+        PlayerLaserTexture = new Texture("laserBlue14.png");
+        EnemyLaserTexture = new Texture("laserRed14.png");
 
         Gdx.input.setInputProcessor(stage);
 
@@ -77,10 +90,14 @@ class GameScreen implements Screen {
             }
         });
 
-        playership = new Ship(shipT , 10, 10,
+        playership = new Ship(PlayerShipTexture , PlayerLaserTexture, 10, 10,
                 WORLD_WITH/2, (WORLD_HEIGHT /2) - 200, 100, 100 );
-        enemyship = new Ship(enemyshipT, 10, 10,
+        enemyship = new Ship(EnemyShipTexture, EnemyLaserTexture,10, 10,
                 WORLD_WITH/2, (WORLD_HEIGHT /2) + 200, 60, 60 );
+
+        playerLaserlist = new LinkedList<>();
+        enemyLaserlist = new LinkedList<>();
+
 
 
         stage.addActor(Back);
