@@ -91,7 +91,7 @@ class MenuScreen implements Screen {
 
 
         // Membuat button untuk ikon Play
-        ImageButton playButton = new ImageButton
+        final ImageButton playButton = new ImageButton
                 (new TextureRegionDrawable(new Texture(("play.png"))));
         playButton.setSize(190, 190);
         playButton.setPosition( (WORLD_WITH + 100 )/ 2 ,
@@ -107,16 +107,24 @@ class MenuScreen implements Screen {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 stage.addActor(playLabel);
+                float originalWidth = playButton.getWidth();
+                float originalHeight = playButton.getHeight();
+                playButton.setSize(225, 225);
+                playButton.setPosition(playButton.getX() - (playButton.getWidth() - originalWidth) / 2f,
+                        playButton.getY() - (playButton.getHeight() - originalHeight) / 2f);
             }
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 playLabel.remove();
+                playButton.setSize(190, 190);
+                playButton.setPosition( (WORLD_WITH + 100 )/ 2 ,
+                        ((WORLD_HEIGHT / 2) - sprite.getHeight()/2));
             }
 
         });
 
         // Membuat Label dari ikon Kelompok
-        ImageButton listkel = new ImageButton
+        final ImageButton listkel = new ImageButton
                 (new TextureRegionDrawable(new Texture(("listkel.png"))));
         listkel.setSize(200, 200);
         listkel.setPosition( WORLD_WITH / 2 - sprite.getWidth() / 2,
@@ -132,11 +140,20 @@ class MenuScreen implements Screen {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 stage.addActor(KelompokLabel);
+                float originalWidth = listkel.getWidth();
+                float originalHeight = listkel.getHeight();
+                listkel.setSize(250, 250);
+                listkel.setPosition(listkel.getX() - (listkel.getWidth() - originalWidth) / 2f,
+                        listkel.getY() - (listkel.getHeight() - originalHeight) / 2f);
+
             }
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 KelompokLabel.remove();
+                listkel.setSize(200, 200);
+                listkel.setPosition(WORLD_WITH / 2 - sprite.getWidth() / 2,
+                        ((WORLD_HEIGHT / 2) - sprite.getHeight()/2));
             }
 
 
