@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 class MenuScreen implements Screen {
 
+
     // Kamera dan Viewport
     private Camera camera;
     private Viewport viewport;
