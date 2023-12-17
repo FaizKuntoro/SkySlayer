@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -16,6 +17,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.security.PrivateKey;
+
 class GameScreen implements Screen {
 
 
@@ -25,7 +28,7 @@ class GameScreen implements Screen {
     private Viewport viewport;
     private SpriteBatch batch;
     private Texture[] backgrounds;
-    private Texture backgroundgame;
+    private Texture backgroundgame, enemyshipT, shipT, shipshield;
 
     private float[] backgroundsoffsets = {0,0};
     private float backgroundmaxscrollingspeed;
@@ -38,6 +41,9 @@ class GameScreen implements Screen {
     private final int WORLD_HEIGHT = 1000;
 
 
+    private Ship playership;
+    private  Ship enemyship;
+
     public GameScreen() {
 
         stage = new Stage();
@@ -45,6 +51,9 @@ class GameScreen implements Screen {
         camera = new OrthographicCamera();
         viewport = new StretchViewport(WORLD_WITH, WORLD_HEIGHT, camera);
         backgroundgame = new Texture("backgroundgame.png");
+        enemyshipT= new Texture("enemyship1.png");
+        shipT = new Texture("ship.png");
+
 
         Gdx.input.setInputProcessor(stage);
 
@@ -67,6 +76,11 @@ class GameScreen implements Screen {
                 skyslayer.getInstance().setScreen(new MenuScreen());
             }
         });
+
+        playership = new Ship(shipT , 10, 10,
+                WORLD_WITH/2, (WORLD_HEIGHT /2) - 200, 100, 100 );
+        enemyship = new Ship(enemyshipT, 10, 10,
+                WORLD_WITH/2, (WORLD_HEIGHT /2) + 200, 60, 60 );
 
 
         stage.addActor(Back);
@@ -97,6 +111,8 @@ class GameScreen implements Screen {
         batch.draw(backgroundgame, 0 , -backgroundoffset+WORLD_HEIGHT, WORLD_WITH, WORLD_HEIGHT);
         renderBackground(deltaTime);
         stage.draw();
+        enemyship.draw(batch);
+        playership.draw(batch);
         batch.end();
 
     }
@@ -149,7 +165,7 @@ class GameScreen implements Screen {
         for (Texture background : backgrounds) {
             background.dispose();
         }
-        stage.dispose();
+        stage.dispose(); 
 
     }
 }

@@ -25,7 +25,7 @@ class KelompokScreen implements Screen {
     private Viewport viewport;
     private SpriteBatch batch;
     private Texture[] backgrounds;
-    private Texture background, kelompokbg;
+    private Texture background, kelompokbg, kelompok13;
 
     private float[] backgroundsoffsets = {0};
     private float backgroundmaxscrollingspeed;
@@ -55,6 +55,7 @@ class KelompokScreen implements Screen {
         camera = new OrthographicCamera();
         viewport = new StretchViewport(WORLD_WITH, WORLD_HEIGHT, camera);
         background = new Texture("bg1alt.png");
+        kelompok13 = new Texture("kelompok13.png");
 
         backgrounds = new Texture[1];
         backgrounds[0] = new Texture("bintang01.png");
@@ -118,6 +119,8 @@ class KelompokScreen implements Screen {
         renderBackground(deltaTime);
         batch.draw(kelompokbg,WORLD_WITH / 2 - sprite.getWidth() / 2 - 325,
                 ((WORLD_HEIGHT / 10 ) - sprite.getHeight()/2) - 170);
+        batch.draw(kelompok13, WORLD_WITH / 2 - sprite.getWidth() / 2 - 145,
+                ((WORLD_HEIGHT / 2 ) - (sprite.getHeight()/2) + 250), 285, 55);
         stage.act();
         stage.draw();
         batch.end();
