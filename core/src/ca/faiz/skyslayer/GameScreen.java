@@ -39,6 +39,10 @@ class GameScreen implements Screen {
     private Texture backgroundgame, EnemyShipTexture, PlayerShipTexture, PlayerShieldTexture,
             PlayerLaserTexture, EnemyLaserTexture;
 
+
+    private TextureAtlas atlas;
+    private TextureRegion laserTexture, shipTexture, shieldTexture;
+
     private float[] backgroundsoffsets = {0,0};
     private float backgroundmaxscrollingspeed;
     private int backgroundoffset;
@@ -58,6 +62,11 @@ class GameScreen implements Screen {
 
     public GameScreen() {
 
+        atlas = new TextureAtlas("gamescreenobject.atlas");
+
+        laserTexture = atlas.findRegion("laserBlue14");
+        shipTexture = atlas.findRegion("playerShip2_blue");
+        shieldTexture = atlas.findRegion("shield1");
         stage = new Stage();
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
@@ -91,10 +100,10 @@ class GameScreen implements Screen {
             }
         });
 
-        playership = new PlayerShip(PlayerShipTexture , PlayerLaserTexture, 10, 10,
+        playership = new PlayerShip(shipTexture , laserTexture, shieldTexture, 10, 10,
                 WORLD_WITH/2, (WORLD_HEIGHT /2) - 200, 100, 100, 0.4f, 4, 45,
         0.5f );
-        enemyship = new EnemyShip(EnemyShipTexture, EnemyLaserTexture,10, 10,
+        enemyship = new EnemyShip(shipTexture, laserTexture, shieldTexture,10, 10,
                 WORLD_WITH/2, (WORLD_HEIGHT /2) + 200, 60, 60, 0.3f, 4, 50, 0.5f);
 
         playerLaserlist = new LinkedList<>();

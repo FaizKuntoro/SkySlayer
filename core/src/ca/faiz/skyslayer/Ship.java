@@ -3,8 +3,10 @@ package ca.faiz.skyslayer;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 abstract class Ship {
+
     private Texture PlayerShipTexture, EnemyShipTexture, PlayerShieldTexture, LaserShipTexture;
 
     float movementspeed;
@@ -16,18 +18,16 @@ abstract class Ship {
     float laserAttackSpeed;
     float timeBetweenShots;
     float timeSinceLastShots = 0;
+    TextureRegion shieldTexture, laserTexture, shipTexture;
 
-
-    public Ship(Texture shipTexture, Texture LaserTexture, float movementspeed,
+    public Ship(TextureRegion shipTexture, TextureRegion LaserTexture, TextureRegion shieldTexture, float movementspeed,
                 int shield, float xCentre, float yCentre, float width, float height,
                 float laserWidth, float laserHeight, float laserMovementSpeed, float laserAttackSpeed
     ) {
 
-        this.PlayerShipTexture = shipTexture;
-        this.LaserShipTexture = LaserTexture;
-        this.LaserShipTexture = new Texture("laserBlue14.png");
-        this.EnemyShipTexture = new Texture("enemyship1.png");
-        this.PlayerShieldTexture = new Texture("shipshield.png");
+        this.shipTexture = shipTexture;
+        this.laserTexture = LaserTexture;
+        this.shieldTexture = shieldTexture;
         this.movementspeed = movementspeed;
         this.laserWidth = laserWidth;
         this.laserHeight = laserHeight;
@@ -52,9 +52,9 @@ abstract class Ship {
     public abstract Laser[] fireLasers();
 
     public void draw(Batch batch) {
-        batch.draw(PlayerShipTexture, xPosition, yPosition, width, height);
+        batch.draw(shipTexture, xPosition, yPosition, width, height);
         if (shield > 0) {
-            batch.draw(PlayerShieldTexture, xPosition, yPosition, width, height);
+            batch.draw(shieldTexture, xPosition, yPosition, width, height);
         }
     }
 }
