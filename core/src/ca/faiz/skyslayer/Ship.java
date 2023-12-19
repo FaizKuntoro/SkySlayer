@@ -8,14 +8,11 @@ import com.badlogic.gdx.math.Rectangle;
 
 abstract class Ship {
 
-    private Texture PlayerShipTexture, EnemyShipTexture, PlayerShieldTexture, LaserShipTexture;
-
     float movementspeed;
     int shield;
     float shieldRegenInterval = 0;
     float regenTimer = 0;
-    float xPosition, yPosition;
-    float width, height;
+
     float laserWidth, laserHeight;
     float laserMovementSpeed;
     float laserAttackSpeed;
@@ -40,19 +37,14 @@ abstract class Ship {
         this.laserMovementSpeed = laserMovementSpeed;
         this.laserAttackSpeed = laserAttackSpeed;
         this.shield = shield;
-        this.xPosition = xCentre - width / 2;
-        this.yPosition = yCentre - height / 2;
-        this.width = width;
-        this.height = height;
         this.regenTimer = regenTimer;
-        this.boundingbox = new Rectangle(xPosition, yPosition, width, height);
+        this.boundingbox = new Rectangle(xCentre - width / 2, yCentre - height / 2, width, height);
 
     }
 
     public void update(float deltaTime) {
         timeSinceLastShots += deltaTime;
         shieldRegenInterval += deltaTime;
-        boundingbox.set(xPosition, yPosition, width, height);
 
         if (shieldRegenInterval >= regenTimer ){
             if (shield < 20 ){
@@ -87,9 +79,9 @@ abstract class Ship {
     public abstract Laser[] fireLasers();
 
     public void draw(Batch batch) {
-        batch.draw(shipTexture, xPosition, yPosition, width, height);
+        batch.draw(shipTexture, boundingbox.x, boundingbox.y, boundingbox.width, boundingbox.height);
         if (shield > 0) {
-            batch.draw(shieldTexture, xPosition, yPosition, width, height);
+            batch.draw(shieldTexture, boundingbox.x, boundingbox.y, boundingbox.width, boundingbox.height);
         }
     }
 

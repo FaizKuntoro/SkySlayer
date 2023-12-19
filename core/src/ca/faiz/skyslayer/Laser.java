@@ -9,19 +9,15 @@ public class Laser {
 
     TextureRegion textureRegion;
     float movementSpeed;
-    float xPosition, yPosition;
-    float width, height;
+    Rectangle boundingbox;
 
 
 
 
 
-    public Laser(float movementSpeed, float xPosition, float yPosition, float width, float height, TextureRegion textureRegion) {
+    public Laser(float movementSpeed, float xLaser, float yLaser, float width, float height, TextureRegion textureRegion) {
         this.movementSpeed = movementSpeed;
-        this.xPosition = xPosition;
-        this.yPosition = yPosition;
-        this.width = width;
-        this.height = height;
+        this.boundingbox = new Rectangle(xLaser - width / 2, yLaser - height/2,width, height);
         this.textureRegion = textureRegion;
 
 
@@ -29,19 +25,19 @@ public class Laser {
 
     public void update(float deltaTime) {
         // Update the position of the laser
-        yPosition += movementSpeed * deltaTime;
+        boundingbox.y += movementSpeed * deltaTime;
         // Update the bounding box position
     }
 
 
     public void draw(Batch batch) {
-            batch.draw(textureRegion, xPosition - width/2, yPosition, width, height);
+            batch.draw(textureRegion, boundingbox.x - boundingbox.width/2, boundingbox.y, boundingbox.width, boundingbox.height);
         }
 
 
 
     public Rectangle getBoundinbox(){
-        return new Rectangle(xPosition, yPosition, width, height);
+        return new Rectangle(boundingbox.x, boundingbox.y, boundingbox.width, boundingbox.height);
     }
 }
 

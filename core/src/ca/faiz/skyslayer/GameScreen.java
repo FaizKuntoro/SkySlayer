@@ -105,10 +105,11 @@ class GameScreen implements Screen {
         playership = new PlayerShip(shipTexture , laserTexture, shieldTexture, 10, 5,
                 WORLD_WITH/2, (WORLD_HEIGHT /2) - 200, 100, 100, 10, 50,
                 500,
-        0.5f , 5f);
+        0.5f , 0.2f);
         enemyship = new EnemyShip(enemyTexture1, laserEnemyTexture, shieldTexture,10, 0,
                 WORLD_WITH/2, (WORLD_HEIGHT /2) + 200, 60, 60, 10, 30,
-                100, 0.7f, 5f);
+                100,
+                0.7f, 5f);
 
         playerLaserlist = new LinkedList<>();
         enemyLaserlist = new LinkedList<>();
@@ -190,9 +191,9 @@ class GameScreen implements Screen {
 
             laser.draw(batch);
 
-            laser.yPosition += laser.movementSpeed * deltaTime;
+            laser.boundingbox.y += laser.movementSpeed * deltaTime;
 
-            if (laser.yPosition > WORLD_HEIGHT) {
+            if (laser.boundingbox.y > WORLD_HEIGHT) {
                 playerLaserlist.remove(i);
                 i--; //
             }
@@ -203,9 +204,9 @@ class GameScreen implements Screen {
 
             laser.draw(batch);
 
-            laser.yPosition -= laser.movementSpeed * deltaTime;
+            laser.boundingbox.y -= laser.movementSpeed * deltaTime;
 
-            if (laser.yPosition < 0f ){
+            if (laser.boundingbox.y < 0f ){
                 enemyLaserlist.remove(i);
                 i--;
             }
