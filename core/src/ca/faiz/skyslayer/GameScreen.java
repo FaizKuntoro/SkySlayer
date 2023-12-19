@@ -1,6 +1,7 @@
 package ca.faiz.skyslayer;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -102,10 +103,10 @@ class GameScreen implements Screen {
             }
         });
 
-        playership = new PlayerShip(shipTexture , laserTexture, shieldTexture, 10, 5,
+        playership = new PlayerShip(shipTexture , laserTexture, shieldTexture, 300, 5,
                 WORLD_WITH/2, (WORLD_HEIGHT /2) - 200, 100, 100, 10, 50,
-                500,
-        0.5f , 0.2f);
+                700,
+        0.5f , 0.5f);
         enemyship = new EnemyShip(enemyTexture1, laserEnemyTexture, shieldTexture,10, 0,
                 WORLD_WITH/2, (WORLD_HEIGHT /2) + 200, 60, 60, 10, 30,
                 100,
@@ -142,7 +143,7 @@ class GameScreen implements Screen {
         enemyship.update(deltaTime);
 
 
-
+        input(deltaTime);
         playership.draw(batch);
         enemyship.draw(batch);
 
@@ -156,6 +157,28 @@ class GameScreen implements Screen {
 
         batch.end();
 
+    }
+
+    private void input(float deltaTime){
+        float leftLimit, rightLimit, upLimit, downLimit;
+        leftLimit = -playership.boundingbox.x;
+        downLimit = -playership.boundingbox.y;
+        rightLimit = WORLD_WITH - playership.boundingbox.x - playership.boundingbox.width;
+        upLimit = WORLD_HEIGHT/2 - playership.boundingbox.y - playership.boundingbox.height;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && rightLimit > 0) {
+            playership.translate(Math.min(playership.movementspeed*deltaTime, rightLimit), 0f);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP) && upLimit > 0) {
+            playership.translate( 0f, Math.min(playership.movementspeed*deltaTime, upLimit));
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && leftLimit < 0) {
+            playership.translate(Math.max(-playership.movementspeed*deltaTime, leftLimit), 0f);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN) && downLimit < 0) {
+            playership.translate(0f, Math.max(-playership.movementspeed*deltaTime, downLimit));
+        }
     }
 
     private void renderExplosion(float deltaTime){

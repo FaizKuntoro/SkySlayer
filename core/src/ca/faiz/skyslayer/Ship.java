@@ -42,6 +42,10 @@ abstract class Ship {
 
     }
 
+    public void translate(float xChange, float yChange) {
+        boundingbox.setPosition(boundingbox.x+xChange, boundingbox.y+yChange);
+    }
+
     public void update(float deltaTime) {
         timeSinceLastShots += deltaTime;
         shieldRegenInterval += deltaTime;
