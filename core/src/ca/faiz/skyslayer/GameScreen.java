@@ -41,7 +41,7 @@ class GameScreen implements Screen {
 
 
     private TextureAtlas atlas;
-    private TextureRegion laserTexture, shipTexture, shieldTexture;
+    private TextureRegion laserTexture, shipTexture, shieldTexture, laserEnemyTexture, enemyTexture1;
 
     private float[] backgroundsoffsets = {0,0};
     private float backgroundmaxscrollingspeed;
@@ -65,8 +65,11 @@ class GameScreen implements Screen {
         atlas = new TextureAtlas("gamescreenobject.atlas");
 
         laserTexture = atlas.findRegion("laserBlue14b");
+        laserEnemyTexture = atlas.findRegion("laserRed14");
         shipTexture = atlas.findRegion("playerShip2_blue");
         shieldTexture = atlas.findRegion("shield1");
+        enemyTexture1 = atlas.findRegion("enemyRed1");
+
         stage = new Stage();
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
@@ -99,8 +102,8 @@ class GameScreen implements Screen {
         playership = new PlayerShip(shipTexture , laserTexture, shieldTexture, 10, 10,
                 WORLD_WITH/2, (WORLD_HEIGHT /2) - 200, 100, 100, 10, 50, 500,
         0.5f );
-        enemyship = new EnemyShip(shipTexture, laserTexture, shieldTexture,10, 10,
-                WORLD_WITH/2, (WORLD_HEIGHT /2) + 200, 60, 60, 10, 50, 50, 0.5f);
+        enemyship = new EnemyShip(enemyTexture1, laserEnemyTexture, shieldTexture,10, 10,
+                WORLD_WITH/2, (WORLD_HEIGHT /2) + 200, 60, 60, 10, 30, 100, 0.7f);
 
         playerLaserlist = new LinkedList<>();
         enemyLaserlist = new LinkedList<>();
@@ -156,23 +159,36 @@ class GameScreen implements Screen {
             }
         }
 
-        ListIterator<Laser> iterator = playerLaserlist.listIterator();
-        while (iterator.hasNext()){
-            Laser laser = iterator.next();
+        for (int i = 0 ; i < playerLaserlist.size(); i++) {
+            Laser laser = playerLaserlist.get(i);
+
+            // Draw the player's laser
             laser.draw(batch);
-            laser.yPosition += laser.movementSpeed*deltaTime;
-            if (laser.yPosition > WORLD_HEIGHT){
-                iterator.remove();
+
+            // Update the player's laser position based on its movement speed and deltaTime
+            laser.yPosition += laser.movementSpeed * deltaTime;
+
+            // Remove the player's laser if it goes beyond the WORLD_HEIGHT
+            if (laser.yPosition > WORLD_HEIGHT) {
+                playerLaserlist.remove(i);
+                i--; // Decrement i to account for the removed element
             }
         }
 
-        iterator = enemyLaserlist.listIterator();
-        while (iterator.hasNext()){
-            Laser laser = iterator.next();
+        // Iterate through the enemy's lasers
+        for (int i = 0; i < enemyLaserlist.size(); i++) {
+            Laser laser = enemyLaserlist.get(i);
+
+            // Draw the enemy's laser
             laser.draw(batch);
-            laser.yPosition -= laser.movementSpeed*deltaTime;
-            if (laser.yPosition > WORLD_HEIGHT){
-                iterator.remove();
+
+            // Update the enemy's laser position based on its movement speed and deltaTime
+            laser.yPosition -= laser.movementSpeed * deltaTime;
+
+            // Remove the enemy's laser if it goes beyond the WORLD_HEIGHT
+            if (laser.yPosition < 0f ){
+                enemyLaserlist.remove(i);
+                i--; // Decrement i to account for the removed element
             }
         }
 
