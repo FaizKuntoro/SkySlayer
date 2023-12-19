@@ -11,6 +11,8 @@ abstract class Ship {
 
     float movementspeed;
     int shield;
+    float shieldRegenInterval = 0;
+    float regenTimer = 0;
     float xPosition, yPosition;
     float width, height;
     float laserWidth, laserHeight;
@@ -21,7 +23,8 @@ abstract class Ship {
 
     public Ship(TextureRegion shipTexture, TextureRegion LaserTexture, TextureRegion shieldTexture, float movementspeed,
                 int shield, float xCentre, float yCentre, float width, float height,
-                float laserWidth, float laserHeight, float laserMovementSpeed, float laserAttackSpeed
+                float laserWidth, float laserHeight, float laserMovementSpeed, float laserAttackSpeed,
+                float regenTimer
     ) {
 
         this.shipTexture = shipTexture;
@@ -37,11 +40,24 @@ abstract class Ship {
         this.yPosition = yCentre - height / 2;
         this.width = width;
         this.height = height;
+        this.regenTimer = regenTimer;
 
     }
 
     public void update(float deltaTime) {
         timeSinceLastShots += deltaTime;
+        shieldRegenInterval += deltaTime;
+
+        if (shieldRegenInterval >= regenTimer ){
+            if (shield < 20 ){
+                shield += 2 ;
+                shieldRegenInterval -= regenTimer;
+            }
+        }
+    }
+
+    public void setShieldTexture(TextureRegion newShieldTexture) {
+        this.shieldTexture = newShieldTexture;
     }
 
     public boolean canFireLaser() {
@@ -55,6 +71,10 @@ abstract class Ship {
         if (shield > 0) {
             batch.draw(shieldTexture, xPosition, yPosition, width, height);
         }
+    }
+
+    public int getShield(){
+        return shield;
     }
 }
 

@@ -41,7 +41,8 @@ class GameScreen implements Screen {
 
 
     private TextureAtlas atlas;
-    private TextureRegion laserTexture, shipTexture, shieldTexture, laserEnemyTexture, enemyTexture1;
+    private TextureRegion laserTexture, shipTexture, shieldTexture, laserEnemyTexture, enemyTexture1,
+            shieldTexture1, enemyShieldTexture;
 
     private float[] backgroundsoffsets = {0,0};
     private float backgroundmaxscrollingspeed;
@@ -68,7 +69,9 @@ class GameScreen implements Screen {
         laserEnemyTexture = atlas.findRegion("laserRed14");
         shipTexture = atlas.findRegion("playerShip2_blue");
         shieldTexture = atlas.findRegion("shield1");
+        shieldTexture1 = atlas.findRegion("shield2");
         enemyTexture1 = atlas.findRegion("enemyRed1");
+        enemyShieldTexture = atlas.findRegion("enemyshield1");
 
         stage = new Stage();
         batch = new SpriteBatch();
@@ -99,11 +102,13 @@ class GameScreen implements Screen {
             }
         });
 
-        playership = new PlayerShip(shipTexture , laserTexture, shieldTexture, 10, 10,
-                WORLD_WITH/2, (WORLD_HEIGHT /2) - 200, 100, 100, 10, 50, 500,
-        0.5f );
-        enemyship = new EnemyShip(enemyTexture1, laserEnemyTexture, shieldTexture,10, 10,
-                WORLD_WITH/2, (WORLD_HEIGHT /2) + 200, 60, 60, 10, 30, 100, 0.7f);
+        playership = new PlayerShip(shipTexture , laserTexture, shieldTexture, 10, 5,
+                WORLD_WITH/2, (WORLD_HEIGHT /2) - 200, 100, 100, 10, 50,
+                500,
+        0.5f , 5f);
+        enemyship = new EnemyShip(enemyTexture1, laserEnemyTexture, shieldTexture,10, 0,
+                WORLD_WITH/2, (WORLD_HEIGHT /2) + 200, 60, 60, 10, 30,
+                100, 0.7f, 5f);
 
         playerLaserlist = new LinkedList<>();
         enemyLaserlist = new LinkedList<>();
@@ -134,6 +139,16 @@ class GameScreen implements Screen {
 
         playership.update(deltaTime);
         enemyship.update(deltaTime);
+
+        if (playership.getShield() >= 0 && playership.getShield() <= 10) {
+            playership.setShieldTexture(shieldTexture);
+        } else if (playership.getShield() >= 6 && playership.getShield() <= 20) {
+            playership.setShieldTexture(shieldTexture1);
+        }
+
+        if (enemyship.getShield() >= 1 && enemyship.getShield() <= 10) {
+            enemyship.setShieldTexture(enemyShieldTexture);
+        }
 
         playership.draw(batch);
         enemyship.draw(batch);

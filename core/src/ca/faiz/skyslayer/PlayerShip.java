@@ -7,8 +7,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 class PlayerShip extends Ship {
 
 
-    public PlayerShip(TextureRegion shipTexture, TextureRegion LaserTexture, TextureRegion ShieldTexture,  float movementspeed, int shield, float xCentre, float yCentre, float width, float height, float laserWidth, float laserHeight, float laserMovementSpeed, float laserAttackSpeed) {
-        super(shipTexture, LaserTexture, ShieldTexture, movementspeed, shield, xCentre, yCentre, width, height, laserWidth, laserHeight, laserMovementSpeed, laserAttackSpeed);
+    public PlayerShip(TextureRegion shipTexture, TextureRegion LaserTexture, TextureRegion ShieldTexture,
+                      float movementspeed, int shield, float xCentre, float yCentre, float width, float height,
+                      float laserWidth, float laserHeight, float laserMovementSpeed, float laserAttackSpeed, float regenTimer) {
+        super(shipTexture, LaserTexture, ShieldTexture, movementspeed, shield, xCentre, yCentre,
+                width, height, laserWidth, laserHeight, laserMovementSpeed, laserAttackSpeed, regenTimer);
 
     }
 
@@ -28,4 +31,16 @@ class PlayerShip extends Ship {
         return laser;
     }
 
+    @Override
+    public void update(float deltaTime) {
+        timeSinceLastShots += deltaTime;
+        shieldRegenInterval += deltaTime;
+
+        if (shieldRegenInterval >= regenTimer) {
+            if (shield < 19) {
+                shield += 2;
+                shieldRegenInterval -= regenTimer;
+            }
+        }
+    }
 }
