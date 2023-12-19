@@ -16,7 +16,6 @@ abstract class Ship {
     float laserWidth, laserHeight;
     float laserMovementSpeed;
     float laserAttackSpeed;
-    float timeBetweenShots;
     float timeSinceLastShots = 0;
     TextureRegion shieldTexture, laserTexture, shipTexture;
 
@@ -46,7 +45,7 @@ abstract class Ship {
     }
 
     public boolean canFireLaser() {
-        return (timeSinceLastShots - timeBetweenShots >= 0);
+        return (timeSinceLastShots - laserAttackSpeed >= 0);
     }
 
     public abstract Laser[] fireLasers();

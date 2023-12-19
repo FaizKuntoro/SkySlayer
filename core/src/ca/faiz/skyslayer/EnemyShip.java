@@ -16,7 +16,7 @@ class EnemyShip extends Ship {
     public Laser[] fireLasers() {
         Laser[] laser = new Laser[2];
 
-        laser[0] = new Laser(laserMovementSpeed, xPosition + width + 0.07f, yPosition + height + 0.45f,
+        laser[0] = new Laser(laserMovementSpeed, xPosition + width + 0.7f, yPosition + height + 0.45f,
                 laserWidth, laserHeight, laserTexture
         );
 

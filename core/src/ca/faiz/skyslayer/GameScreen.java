@@ -64,7 +64,7 @@ class GameScreen implements Screen {
 
         atlas = new TextureAtlas("gamescreenobject.atlas");
 
-        laserTexture = atlas.findRegion("laserBlue14");
+        laserTexture = atlas.findRegion("laserBlue14b");
         shipTexture = atlas.findRegion("playerShip2_blue");
         shieldTexture = atlas.findRegion("shield1");
         stage = new Stage();
@@ -73,10 +73,6 @@ class GameScreen implements Screen {
         viewport = new StretchViewport(WORLD_WITH, WORLD_HEIGHT, camera);
 
         backgroundgame = new Texture("backgroundgame.png");
-        EnemyShipTexture = new Texture("enemyship1.png");
-        PlayerShipTexture = new Texture("ship.png");
-        PlayerLaserTexture = new Texture("ship.png");
-        EnemyLaserTexture = new Texture("laserRed14.png");
 
         Gdx.input.setInputProcessor(stage);
 
@@ -101,10 +97,10 @@ class GameScreen implements Screen {
         });
 
         playership = new PlayerShip(shipTexture , laserTexture, shieldTexture, 10, 10,
-                WORLD_WITH/2, (WORLD_HEIGHT /2) - 200, 100, 100, 0.4f, 4, 45,
+                WORLD_WITH/2, (WORLD_HEIGHT /2) - 200, 100, 100, 10, 50, 500,
         0.5f );
         enemyship = new EnemyShip(shipTexture, laserTexture, shieldTexture,10, 10,
-                WORLD_WITH/2, (WORLD_HEIGHT /2) + 200, 60, 60, 0.3f, 4, 50, 0.5f);
+                WORLD_WITH/2, (WORLD_HEIGHT /2) + 200, 60, 60, 10, 50, 50, 0.5f);
 
         playerLaserlist = new LinkedList<>();
         enemyLaserlist = new LinkedList<>();
@@ -112,6 +108,7 @@ class GameScreen implements Screen {
 
 
         stage.addActor(Back);
+        batch = new SpriteBatch();
 
     }
 
@@ -173,7 +170,7 @@ class GameScreen implements Screen {
         while (iterator.hasNext()){
             Laser laser = iterator.next();
             laser.draw(batch);
-            laser.yPosition += laser.movementSpeed*deltaTime;
+            laser.yPosition -= laser.movementSpeed*deltaTime;
             if (laser.yPosition > WORLD_HEIGHT){
                 iterator.remove();
             }
@@ -227,11 +224,7 @@ class GameScreen implements Screen {
     @Override
     public void dispose() {
         batch.dispose();
-        backgroundgame.dispose();
-        for (Texture background : backgrounds) {
-            background.dispose();
-        }
-        stage.dispose(); 
+
 
     }
 }
