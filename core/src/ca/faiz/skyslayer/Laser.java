@@ -23,11 +23,6 @@ public class Laser {
 
     }
 
-    public void update(float deltaTime) {
-        // Update the position of the laser
-        boundingbox.y += movementSpeed * deltaTime;
-        // Update the bounding box position
-    }
 
 
     public void draw(Batch batch) {

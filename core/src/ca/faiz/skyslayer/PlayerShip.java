@@ -6,14 +6,33 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 class PlayerShip extends Ship {
 
+    TextureRegion damagedShieldTexture;
 
-    public PlayerShip(TextureRegion shipTexture, TextureRegion LaserTexture, TextureRegion ShieldTexture,
+
+    public PlayerShip(TextureRegion shipTexture, TextureRegion LaserTexture, TextureRegion ShieldTexture, TextureRegion damagedShipTexture,
                       float movementspeed, int shield, float xCentre, float yCentre, float width, float height,
                       float laserWidth, float laserHeight, float laserMovementSpeed, float laserAttackSpeed, float regenTimer) {
         super(shipTexture, LaserTexture, ShieldTexture, movementspeed, shield, xCentre, yCentre,
                 width, height, laserWidth, laserHeight, laserMovementSpeed, laserAttackSpeed, regenTimer);
 
+
+
     }
+
+
+    @Override
+    public void draw(Batch batch) {
+        batch.draw(shipTexture, boundingbox.x, boundingbox.y, boundingbox.width, boundingbox.height);
+        if (shield > 10) {
+            batch.draw(shieldTexture, boundingbox.x, boundingbox.y, boundingbox.width, boundingbox.height);
+        }
+
+        if (shield < 0) {
+            batch.draw(damagedShipTexture, boundingbox.x, boundingbox.y, boundingbox.width, boundingbox.height);
+        
+        }
+    }
+
 
     @Override
     public Laser[] fireLasers() {
@@ -41,9 +60,13 @@ class PlayerShip extends Ship {
         shieldRegenInterval += deltaTime;
 
         if (shieldRegenInterval >= regenTimer) {
-            if (shield < 19) {
+            if (shield >= -20) {
                 shield += 2;
                 shieldRegenInterval -= regenTimer;
+            }
+
+            if (shield > 20){
+                shield = 20;
             }
         }
     }

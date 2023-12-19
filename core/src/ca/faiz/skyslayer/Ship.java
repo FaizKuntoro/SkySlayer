@@ -17,12 +17,12 @@ abstract class Ship {
     float laserMovementSpeed;
     float laserAttackSpeed;
     float timeSinceLastShots = 0;
-    TextureRegion shieldTexture, laserTexture, shipTexture;
+    TextureRegion shieldTexture, laserTexture, shipTexture, damagedShipTexture;
 
     public Rectangle boundingbox;
 
 
-    public Ship(TextureRegion shipTexture, TextureRegion LaserTexture, TextureRegion shieldTexture, float movementspeed,
+    public Ship(TextureRegion shipTexture, TextureRegion LaserTexture, TextureRegion shieldTexture,  float movementspeed,
                 int shield, float xCentre, float yCentre, float width, float height,
                 float laserWidth, float laserHeight, float laserMovementSpeed, float laserAttackSpeed,
                 float regenTimer
@@ -39,6 +39,7 @@ abstract class Ship {
         this.shield = shield;
         this.regenTimer = regenTimer;
         this.boundingbox = new Rectangle(xCentre - width / 2, yCentre - height / 2, width, height);
+        this.damagedShipTexture = damagedShipTexture;
 
     }
 
@@ -51,7 +52,7 @@ abstract class Ship {
         shieldRegenInterval += deltaTime;
 
         if (shieldRegenInterval >= regenTimer ){
-            if (shield < 20 ){
+            if (shield > 0 ){
                 shield += 2 ;
                 shieldRegenInterval -= regenTimer;
             }
@@ -65,11 +66,16 @@ abstract class Ship {
     public void takeDamage(int damage) {
         shield -= damage;
 
-        // Ensure shield does not go below zero
-        if (shield < 0) {
-            shield = 0;
+        if (shield <= -20) {
+            shield = -20;
 
         }
+    }
+
+
+
+    public void laserBuff(float newlaserspeed){
+        this.laserAttackSpeed = newlaserspeed;
     }
 
     public boolean canFireLaser() {
@@ -93,6 +99,12 @@ abstract class Ship {
         return shield;
     }
 
+    public void setDamagedShieldTexture(TextureRegion newDamagedTexture) {
+        this.damagedShipTexture = newDamagedTexture;
+    }
+
 }
+
+
 
 

@@ -43,7 +43,7 @@ class GameScreen implements Screen {
 
     private TextureAtlas atlas;
     private TextureRegion laserTexture, shipTexture, shieldTexture, laserEnemyTexture, enemyTexture1,
-            shieldTexture1, enemyShieldTexture;
+            shieldTexture1, enemyShieldTexture, damagedShieldTexture, damagedShieldTexture1, damagedShieldTexture2;
 
     private float[] backgroundsoffsets = {0,0};
     private float backgroundmaxscrollingspeed;
@@ -62,6 +62,7 @@ class GameScreen implements Screen {
     private LinkedList<Laser> playerLaserlist;
     private LinkedList<Laser> enemyLaserlist;
 
+
     public GameScreen() {
 
         atlas = new TextureAtlas("gamescreenobject.atlas");
@@ -73,6 +74,9 @@ class GameScreen implements Screen {
         shieldTexture1 = atlas.findRegion("shield2");
         enemyTexture1 = atlas.findRegion("enemyRed1");
         enemyShieldTexture = atlas.findRegion("enemyshield1");
+        damagedShieldTexture = atlas.findRegion("playerShip2_damage1");
+        damagedShieldTexture1 = atlas.findRegion("playerShip2_damage2");
+        damagedShieldTexture2 = atlas.findRegion("playerShip2_damage3");
 
         stage = new Stage();
         batch = new SpriteBatch();
@@ -103,14 +107,14 @@ class GameScreen implements Screen {
             }
         });
 
-        playership = new PlayerShip(shipTexture , laserTexture, shieldTexture, 300, 5,
+        playership = new PlayerShip(shipTexture , laserTexture, shieldTexture, damagedShieldTexture, 300, 5,
                 WORLD_WITH/2, (WORLD_HEIGHT /2) - 200, 100, 100, 10, 50,
                 700,
         0.5f , 0.5f);
         enemyship = new EnemyShip(enemyTexture1, laserEnemyTexture, shieldTexture,10, 0,
                 WORLD_WITH/2, (WORLD_HEIGHT /2) + 200, 60, 60, 10, 30,
-                100,
-                0.7f, 5f);
+                400,
+                0.5f, 5f);
 
         playerLaserlist = new LinkedList<>();
         enemyLaserlist = new LinkedList<>();
@@ -146,6 +150,8 @@ class GameScreen implements Screen {
         input(deltaTime);
         playership.draw(batch);
         enemyship.draw(batch);
+
+
 
         backgroundoffset++;
         if(backgroundoffset % WORLD_HEIGHT == 0 ){
@@ -186,10 +192,16 @@ class GameScreen implements Screen {
     }
 
     private void renderLasers(float deltaTime){
-        if (playership.getShield() >= 0 && playership.getShield() <= 10) {
+        if (playership.getShield() >= 11 && playership.getShield() <= 15) {
             playership.setShieldTexture(shieldTexture);
-        } else if (playership.getShield() >= 6 && playership.getShield() <= 20) {
+        } else if (playership.getShield() >= 16 && playership.getShield() <=20) {
             playership.setShieldTexture(shieldTexture1);
+        } else if (playership.getShield() <= -1 && playership.getShield() >= -8) {
+            playership.setDamagedShieldTexture(damagedShieldTexture);
+        }else if (playership.getShield() <= -9 && playership.getShield() >= -15) {
+            playership.setDamagedShieldTexture(damagedShieldTexture1);
+        }else if (playership.getShield() <= -16 && playership.getShield() == -20) {
+            playership.setDamagedShieldTexture(damagedShieldTexture2);
         }
 
         if (enemyship.getShield() >= 1 && enemyship.getShield() <= 10) {
@@ -240,7 +252,9 @@ class GameScreen implements Screen {
         for (int i = 0 ; i < playerLaserlist.size(); i++) {
             Laser laser = playerLaserlist.get(i);
 
+
             if (enemyship.collide(laser.getBoundinbox())){
+                System.out.println(playership.shield);
                 enemyship.takeDamage(2);
                 playerLaserlist.remove(i);
                 i--;
