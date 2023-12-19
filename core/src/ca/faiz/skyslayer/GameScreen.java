@@ -23,11 +23,12 @@ import org.w3c.dom.Text;
 
 import java.security.PrivateKey;
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 class GameScreen implements Screen {
 
 
-    private TextureAtlas textureAtlas;
+
     private TextureRegion textureRegion;
     //Instansi kelas untuk kamera dan viewport
 
@@ -65,7 +66,7 @@ class GameScreen implements Screen {
         backgroundgame = new Texture("backgroundgame.png");
         EnemyShipTexture = new Texture("enemyship1.png");
         PlayerShipTexture = new Texture("ship.png");
-        PlayerLaserTexture = new Texture("laserBlue14.png");
+        PlayerLaserTexture = new Texture("ship.png");
         EnemyLaserTexture = new Texture("laserRed14.png");
 
         Gdx.input.setInputProcessor(stage);
@@ -90,10 +91,11 @@ class GameScreen implements Screen {
             }
         });
 
-        playership = new Ship(PlayerShipTexture , PlayerLaserTexture, 10, 10,
-                WORLD_WITH/2, (WORLD_HEIGHT /2) - 200, 100, 100 );
-        enemyship = new Ship(EnemyShipTexture, EnemyLaserTexture,10, 10,
-                WORLD_WITH/2, (WORLD_HEIGHT /2) + 200, 60, 60 );
+        playership = new PlayerShip(PlayerShipTexture , PlayerLaserTexture, 10, 10,
+                WORLD_WITH/2, (WORLD_HEIGHT /2) - 200, 100, 100, 0.4f, 4, 45,
+        0.5f );
+        enemyship = new EnemyShip(EnemyShipTexture, EnemyLaserTexture,10, 10,
+                WORLD_WITH/2, (WORLD_HEIGHT /2) + 200, 60, 60, 0.3f, 4, 50, 0.5f);
 
         playerLaserlist = new LinkedList<>();
         enemyLaserlist = new LinkedList<>();
@@ -111,9 +113,21 @@ class GameScreen implements Screen {
 
     @Override
     public void render(float deltaTime) {
+        batch.begin();
 
 
 
+
+        batch.draw(backgroundgame, 0 , -backgroundoffset, WORLD_WITH, WORLD_HEIGHT);
+        batch.draw(backgroundgame, 0 , -backgroundoffset+WORLD_HEIGHT, WORLD_WITH, WORLD_HEIGHT);
+        renderBackground(deltaTime);
+        stage.draw();
+
+        playership.update(deltaTime);
+        enemyship.update(deltaTime);
+
+        playership.draw(batch);
+        enemyship.draw(batch);
 
         backgroundoffset++;
         if(backgroundoffset % WORLD_HEIGHT == 0 ){
@@ -122,14 +136,40 @@ class GameScreen implements Screen {
 
         }
 
-        batch.begin();
+        if (playership.canFireLaser()){
+            Laser[] lasers = playership.fireLasers();
+            for (Laser laser: lasers){
+                playerLaserlist.add(laser);
+            }
+        }
 
-        batch.draw(backgroundgame, 0 , -backgroundoffset, WORLD_WITH, WORLD_HEIGHT);
-        batch.draw(backgroundgame, 0 , -backgroundoffset+WORLD_HEIGHT, WORLD_WITH, WORLD_HEIGHT);
-        renderBackground(deltaTime);
-        stage.draw();
-        enemyship.draw(batch);
-        playership.draw(batch);
+        if (enemyship.canFireLaser()){
+            Laser[] lasers = enemyship.fireLasers();
+            for (Laser laser: lasers){
+                enemyLaserlist.add(laser);
+            }
+        }
+
+        ListIterator<Laser> iterator = playerLaserlist.listIterator();
+        while (iterator.hasNext()){
+            Laser laser = iterator.next();
+            laser.draw(batch);
+            laser.yPosition += laser.movementSpeed*deltaTime;
+            if (laser.yPosition > WORLD_HEIGHT){
+                iterator.remove();
+            }
+        }
+
+        iterator = enemyLaserlist.listIterator();
+        while (iterator.hasNext()){
+            Laser laser = iterator.next();
+            laser.draw(batch);
+            laser.yPosition += laser.movementSpeed*deltaTime;
+            if (laser.yPosition > WORLD_HEIGHT){
+                iterator.remove();
+            }
+        }
+
         batch.end();
 
     }
