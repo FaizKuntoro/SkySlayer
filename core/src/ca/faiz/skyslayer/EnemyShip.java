@@ -1,6 +1,5 @@
 package ca.faiz.skyslayer;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -38,13 +37,15 @@ class EnemyShip extends Ship {
         }
     }
 
+
+
     @Override
     public void update(float deltaTime) {
         timeSinceLastShots += deltaTime;
         shieldRegenInterval += deltaTime;
 
         if (shieldRegenInterval >= regenTimer) {
-            if (shield < 1) {
+            if (shield < 3) {
                 shield += 1;
                 shieldRegenInterval -= regenTimer;
             }

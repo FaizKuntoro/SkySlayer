@@ -140,6 +140,28 @@ class GameScreen implements Screen {
         playership.update(deltaTime);
         enemyship.update(deltaTime);
 
+
+
+        playership.draw(batch);
+        enemyship.draw(batch);
+
+        backgroundoffset++;
+        if(backgroundoffset % WORLD_HEIGHT == 0 ){
+            backgroundoffset = 0;
+        }
+
+        collide(deltaTime);
+        renderLasers(deltaTime);
+
+        batch.end();
+
+    }
+
+    private void renderExplosion(float deltaTime){
+
+    }
+
+    private void renderLasers(float deltaTime){
         if (playership.getShield() >= 0 && playership.getShield() <= 10) {
             playership.setShieldTexture(shieldTexture);
         } else if (playership.getShield() >= 6 && playership.getShield() <= 20) {
@@ -149,17 +171,6 @@ class GameScreen implements Screen {
         if (enemyship.getShield() >= 1 && enemyship.getShield() <= 10) {
             enemyship.setShieldTexture(enemyShieldTexture);
         }
-
-        playership.draw(batch);
-        enemyship.draw(batch);
-
-        backgroundoffset++;
-        if(backgroundoffset % WORLD_HEIGHT == 0 ){
-            backgroundoffset = 0;
-
-
-        }
-
         if (playership.canFireLaser()){
             Laser[] lasers = playership.fireLasers();
             for (Laser laser: lasers){
@@ -177,38 +188,50 @@ class GameScreen implements Screen {
         for (int i = 0 ; i < playerLaserlist.size(); i++) {
             Laser laser = playerLaserlist.get(i);
 
-            // Draw the player's laser
             laser.draw(batch);
 
-            // Update the player's laser position based on its movement speed and deltaTime
             laser.yPosition += laser.movementSpeed * deltaTime;
 
-            // Remove the player's laser if it goes beyond the WORLD_HEIGHT
             if (laser.yPosition > WORLD_HEIGHT) {
                 playerLaserlist.remove(i);
-                i--; // Decrement i to account for the removed element
+                i--; //
             }
         }
 
-        // Iterate through the enemy's lasers
         for (int i = 0; i < enemyLaserlist.size(); i++) {
             Laser laser = enemyLaserlist.get(i);
 
-            // Draw the enemy's laser
             laser.draw(batch);
 
-            // Update the enemy's laser position based on its movement speed and deltaTime
             laser.yPosition -= laser.movementSpeed * deltaTime;
 
-            // Remove the enemy's laser if it goes beyond the WORLD_HEIGHT
             if (laser.yPosition < 0f ){
                 enemyLaserlist.remove(i);
-                i--; // Decrement i to account for the removed element
+                i--;
+            }
+        }
+    }
+
+    private void collide(float deltaTime){
+        for (int i = 0 ; i < playerLaserlist.size(); i++) {
+            Laser laser = playerLaserlist.get(i);
+
+            if (enemyship.collide(laser.getBoundinbox())){
+                enemyship.takeDamage(2);
+                playerLaserlist.remove(i);
+                i--;
             }
         }
 
-        batch.end();
+        for (int i = 0 ; i < enemyLaserlist.size(); i++) {
+            Laser laser = enemyLaserlist.get(i);
 
+            if (playership.collide(laser.getBoundinbox())){
+                playership.takeDamage(2);
+                enemyLaserlist.remove(i);
+                i--;
+            }
+        }
     }
 
     private void renderBackground(float deltaTime) {

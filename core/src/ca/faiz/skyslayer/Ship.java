@@ -4,6 +4,7 @@ package ca.faiz.skyslayer;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 
 abstract class Ship {
 
@@ -20,6 +21,9 @@ abstract class Ship {
     float laserAttackSpeed;
     float timeSinceLastShots = 0;
     TextureRegion shieldTexture, laserTexture, shipTexture;
+
+    public Rectangle boundingbox;
+
 
     public Ship(TextureRegion shipTexture, TextureRegion LaserTexture, TextureRegion shieldTexture, float movementspeed,
                 int shield, float xCentre, float yCentre, float width, float height,
@@ -41,27 +45,43 @@ abstract class Ship {
         this.width = width;
         this.height = height;
         this.regenTimer = regenTimer;
+        this.boundingbox = new Rectangle(xPosition, yPosition, width, height);
 
     }
 
     public void update(float deltaTime) {
         timeSinceLastShots += deltaTime;
         shieldRegenInterval += deltaTime;
+        boundingbox.set(xPosition, yPosition, width, height);
 
         if (shieldRegenInterval >= regenTimer ){
             if (shield < 20 ){
                 shield += 2 ;
                 shieldRegenInterval -= regenTimer;
             }
-        }
+       }
     }
 
     public void setShieldTexture(TextureRegion newShieldTexture) {
         this.shieldTexture = newShieldTexture;
     }
 
+    public void takeDamage(int damage) {
+        shield -= damage;
+
+        // Ensure shield does not go below zero
+        if (shield < 0) {
+            shield = 0;
+
+        }
+    }
+
     public boolean canFireLaser() {
         return (timeSinceLastShots - laserAttackSpeed >= 0);
+    }
+
+    public boolean collide(Rectangle rectangle2){
+        return boundingbox.overlaps(rectangle2);
     }
 
     public abstract Laser[] fireLasers();
@@ -76,6 +96,7 @@ abstract class Ship {
     public int getShield(){
         return shield;
     }
+
 }
 
 

@@ -1,7 +1,9 @@
 package ca.faiz.skyslayer;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 
 public class Laser {
 
@@ -13,6 +15,7 @@ public class Laser {
 
 
 
+
     public Laser(float movementSpeed, float xPosition, float yPosition, float width, float height, TextureRegion textureRegion) {
         this.movementSpeed = movementSpeed;
         this.xPosition = xPosition;
@@ -20,6 +23,14 @@ public class Laser {
         this.width = width;
         this.height = height;
         this.textureRegion = textureRegion;
+
+
+    }
+
+    public void update(float deltaTime) {
+        // Update the position of the laser
+        yPosition += movementSpeed * deltaTime;
+        // Update the bounding box position
     }
 
 
@@ -27,4 +38,10 @@ public class Laser {
             batch.draw(textureRegion, xPosition - width/2, yPosition, width, height);
         }
 
+
+
+    public Rectangle getBoundinbox(){
+        return new Rectangle(xPosition, yPosition, width, height);
+    }
 }
+
