@@ -220,7 +220,6 @@ class GameScreen implements Screen {
 
         if (playership.collide(superspeed.boundingbox)) {
             superspeed.powerUpTimer = 0f;
-            System.out.println("got em");
             superspeed.boundingbox.y =+ 3000;
 
 
@@ -233,6 +232,11 @@ class GameScreen implements Screen {
             superspeed.boundingbox.y = WORLD_HEIGHT;
             superspeed.boundingbox.x = +500;
 
+        }
+
+        if (superspeed.powerUpTimer >= 30f){
+            superspeed.powerUpTimer = 0f;
+            superspeed.boundingbox.y = WORLD_HEIGHT;
         }
 
 
@@ -303,7 +307,7 @@ class GameScreen implements Screen {
 
             if (enemyship.collide(laser.getBoundinbox())){
                 System.out.println(superspeed.powerUpTimer);
-                System.out.println(playership.laserAttackSpeed);
+                System.out.println(playership.shield);
                 enemyship.takeDamage(2);
                 playerLaserlist.remove(i);
                 i--;

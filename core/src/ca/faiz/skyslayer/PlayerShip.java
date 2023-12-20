@@ -60,13 +60,18 @@ class PlayerShip extends Ship {
         shieldRegenInterval += deltaTime;
 
         if (shieldRegenInterval >= regenTimer) {
-            if (shield >= -20) {
+            if (shield >= -19) {
                 shield += 2;
                 shieldRegenInterval -= regenTimer;
             }
 
             if (shield > 20){
                 shield = 20;
+            }
+
+            if (shield <= -20){
+                skyslayer.getInstance().setScreen(new DeathScreen());
+                System.out.println("PEpeng");
             }
         }
     }
