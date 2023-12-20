@@ -1,13 +1,13 @@
 package ca.faiz.skyslayer;
 
+
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -16,21 +16,15 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-import org.w3c.dom.Text;
-
-import java.security.PrivateKey;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
+
+
 
 class GameScreen implements Screen {
-
 
 
     private TextureRegion textureRegion;
@@ -40,41 +34,33 @@ class GameScreen implements Screen {
     private Viewport viewport;
     private SpriteBatch batch;
     private Texture[] backgrounds;
-    private Texture backgroundgame, EnemyShipTexture, PlayerShipTexture, PlayerShieldTexture,
-            PlayerLaserTexture, EnemyLaserTexture;
+    private Texture backgroundgame;
 
 
     private TextureAtlas atlas;
     private TextureRegion laserTexture, shipTexture, shieldTexture, laserEnemyTexture, enemyTexture1,
             shieldTexture1, enemyShieldTexture, damagedShieldTexture, damagedShieldTexture1, damagedShieldTexture2
-            , powerUps;
+            , powerUps, powerUps1;
 
     private float[] backgroundsoffsets = {0,0};
     private float backgroundmaxscrollingspeed;
-    private int backgroundoffset;
+    private int backgroundoffset, canfiremore;
 
     private Stage stage;
-
-
     private final int WORLD_WITH = 650;
     private final int WORLD_HEIGHT = 1000;
-
-
     private Ship playership;
     private  Ship enemyship;
-
-    private PowerUps superspeed;
-
+    private PowerUps superspeed, morebullets;
     private LinkedList<Laser> playerLaserlist;
     private LinkedList<Laser> enemyLaserlist;
-    private List<PowerUps> powerUpsList = new ArrayList<>();
-    private LinkedList<SuperSpeed> powerUpsLinkedList;
+
+    public Texture text123;
+
 
 
     public GameScreen() {
-
         atlas = new TextureAtlas("gamescreenobject.atlas");
-
         laserTexture = atlas.findRegion("laserBlue14b");
         laserEnemyTexture = atlas.findRegion("laserRed14");
         shipTexture = atlas.findRegion("playerShip2_blue");
@@ -86,9 +72,17 @@ class GameScreen implements Screen {
         damagedShieldTexture1 = atlas.findRegion("playerShip2_damage2");
         damagedShieldTexture2 = atlas.findRegion("playerShip2_damage3");
         powerUps = atlas.findRegion("bold_silver");
+        powerUps1 = atlas.findRegion("star_bronze");
 
-        superspeed = new SuperSpeed(5f,100, powerUps,WORLD_WITH / 2 - 200, WORLD_HEIGHT  ,
+        text123 = new Texture("back.png");
+
+
+       superspeed = new SuperSpeed(5f,100, powerUps,WORLD_WITH / 2 - 200, WORLD_HEIGHT  ,
                 30, 50);
+       morebullets = new MoreBullets(5f,100, powerUps1,WORLD_WITH / 2 + 200 , WORLD_HEIGHT  ,
+                30, 50);
+
+
 
         stage = new Stage();
         batch = new SpriteBatch();
@@ -121,7 +115,7 @@ class GameScreen implements Screen {
 
         playership = new PlayerShip(shipTexture , laserTexture, shieldTexture, damagedShieldTexture, 300, 5,
                 WORLD_WITH/2, (WORLD_HEIGHT /2) - 200, 100, 100, 10, 50,
-                700,
+                1000,
         0.5f , 0.5f);
         enemyship = new EnemyShip(enemyTexture1, laserEnemyTexture, shieldTexture,10, 5,
                 WORLD_WITH/2, (WORLD_HEIGHT /2) + 200, 60, 60, 10, 30,
@@ -155,9 +149,11 @@ class GameScreen implements Screen {
         renderBackground(deltaTime);
         stage.draw();
 
+
         playership.update(deltaTime);
         enemyship.update(deltaTime);
         superspeed.update(deltaTime);
+        morebullets.update(deltaTime);
 
 
         input(deltaTime);
@@ -172,6 +168,7 @@ class GameScreen implements Screen {
         }
 
         renderPowerUps(deltaTime);
+        renderPowerUps1(deltaTime);
         collide(deltaTime);
         renderLasers(deltaTime);
 
@@ -237,6 +234,48 @@ class GameScreen implements Screen {
             superspeed.boundingbox.y = WORLD_HEIGHT;
         }
 
+        if (enemyship.shield <= 0){
+            enemyship.boundingbox.x += 1000;
+            enemyship.boundingbox.y += 1000;
+        }
+
+
+    }
+
+    public void renderPowerUps1(float deltaTime){
+
+        if (morebullets.powerUpTimer >= 10f && morebullets.powerUpTimer <= 20f ){
+            morebullets.draw(batch);
+
+            morebullets.boundingbox.y -= morebullets.movementspeeds * deltaTime;
+
+        }
+
+        if (playership.collide(morebullets.boundingbox)) {
+            morebullets.powerUpTimer = 0f;
+            morebullets.boundingbox.y =+ 3000;
+
+            canfiremore = 1;
+        }
+
+        if (morebullets.powerUpTimer >= 5f && canfiremore == 1){
+            canfiremore = 0;
+            morebullets.powerUpTimer = 5f;
+            morebullets.boundingbox.y = WORLD_HEIGHT;
+            morebullets.boundingbox.x = +500;
+
+        }
+
+        if (morebullets.powerUpTimer >= 30f){
+            morebullets.powerUpTimer = 0f;
+            morebullets.boundingbox.y = WORLD_HEIGHT;
+        }
+
+        if (enemyship.shield <= 0){
+            enemyship.boundingbox.x += 1000;
+            enemyship.boundingbox.y += 1000;
+        }
+
 
     }
 
@@ -258,26 +297,21 @@ class GameScreen implements Screen {
             enemyship.setShieldTexture(enemyShieldTexture);
         }
 
-        if (enemyship.shield <= 0){
-            enemyship.boundingbox.y += WORLD_HEIGHT + 300;
-            enemyship.boundingbox.x =+ WORLD_WITH + 300;
-        }
         if (playership.canFireLaser()){
-            if (playership.shield <= 10){
-                Laser[] lasers = playership.fireMoreLasers();
-                for (Laser laser: lasers){
+            if (canfiremore == 1){
+                Laser[] morelasers = playership.fireMoreLasers();
+                for (Laser laser: morelasers) {
                     playerLaserlist.add(laser);
                 }
-            } else {
-            }
-            Laser[] lasers = playership.fireLasers();
-            for (Laser laser: lasers){
-                playerLaserlist.add(laser);
-            }
-
-
+            } else if ( canfiremore == 0){
+                Laser[] lasers = playership.fireLasers();
+                for (Laser laser: lasers){
+                    playerLaserlist.add(laser);
+                }}
 
         }
+
+
 
 
 
@@ -293,6 +327,10 @@ class GameScreen implements Screen {
             Laser laser = playerLaserlist.get(i);
 
             laser.draw(batch);
+
+            System.out.println(morebullets.powerUpTimer);
+            System.out.println(canfiremore)      ;
+
 
             laser.boundingbox.y += laser.movementSpeed * deltaTime;
 
@@ -322,8 +360,6 @@ class GameScreen implements Screen {
 
 
             if (enemyship.collide(laser.getBoundinbox())){
-                System.out.println(superspeed.powerUpTimer);
-                System.out.println(enemyship.shield);
                 enemyship.takeDamage(2);
                 playerLaserlist.remove(i);
                 i--;

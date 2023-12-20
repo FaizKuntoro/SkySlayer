@@ -1,7 +1,6 @@
 package ca.faiz.skyslayer;
 
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -60,6 +59,8 @@ abstract class Ship {
        }
     }
 
+
+    //
     public void setShieldTexture(TextureRegion newShieldTexture) {
         this.shieldTexture = newShieldTexture;
     }

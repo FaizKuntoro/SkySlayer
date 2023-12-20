@@ -5,8 +5,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 class SuperSpeed extends PowerUps{
 
-
-
     public SuperSpeed(float PowerupTimer, float movementSpeed, TextureRegion powerUps, float xPowerup, float yPowerup, float width, float height) {
         super(PowerupTimer, movementSpeed, powerUps, xPowerup, yPowerup, width, height);
 

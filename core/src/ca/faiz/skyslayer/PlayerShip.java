@@ -14,8 +14,6 @@ class PlayerShip extends Ship {
         super(shipTexture, LaserTexture, ShieldTexture, movementspeed, shield, xCentre, yCentre,
                 width, height, laserWidth, laserHeight, laserMovementSpeed, laserAttackSpeed, regenTimer);
 
-
-
     }
 
 
@@ -35,7 +33,7 @@ class PlayerShip extends Ship {
 
     @Override
     public Laser[] fireLasers() {
-        Laser[] laser = new Laser[3];
+        Laser[] laser = new Laser[2];
 
         laser[0] = new Laser(laserMovementSpeed, boundingbox.x, boundingbox.y + laserHeight,
                 laserWidth, laserHeight, laserTexture
@@ -45,17 +43,13 @@ class PlayerShip extends Ship {
                 laserWidth, laserHeight, laserTexture
         );
 
-        laser[2] = new Laser(laserMovementSpeed, boundingbox.x + boundingbox.width/2, boundingbox.y + laserHeight,
-                laserWidth, laserHeight, laserTexture
-        );
-
         timeSinceLastShots = 0;
         return laser;
     }
 
     @Override
     public Laser[] fireMoreLasers(){
-        Laser[] morelaser = new Laser[2];
+        Laser[] morelaser = new Laser[5];
 
         morelaser[0] = new Laser(laserMovementSpeed, boundingbox.x, boundingbox.y + laserHeight,
                 laserWidth, laserHeight, laserTexture
@@ -64,6 +58,21 @@ class PlayerShip extends Ship {
         morelaser[1] = new Laser(laserMovementSpeed, boundingbox.x +boundingbox.width, boundingbox.y + laserHeight,
                 laserWidth, laserHeight, laserTexture
         );
+
+        morelaser[2] = new Laser(laserMovementSpeed, boundingbox.x + boundingbox.width/2, boundingbox.y+10 + laserHeight,
+                laserWidth, laserHeight, laserTexture
+        );
+
+        morelaser[3] = new Laser(laserMovementSpeed, boundingbox.x + boundingbox.width/4 ,boundingbox.y+5 + laserHeight,
+                laserWidth, laserHeight, laserTexture
+        );
+
+        morelaser[4] = new Laser(laserMovementSpeed, boundingbox.x +(boundingbox.width)*3/4, boundingbox.y+5 + laserHeight,
+                laserWidth, laserHeight, laserTexture
+        );
+
+
+
 
         timeSinceLastShots = 0;
         return morelaser;
@@ -86,7 +95,7 @@ class PlayerShip extends Ship {
 
             if (shield <= -20){
                 skyslayer.getInstance().setScreen(new DeathScreen());
-                System.out.println("PEpeng");
+                System.out.println("mati!");
             }
 
         }

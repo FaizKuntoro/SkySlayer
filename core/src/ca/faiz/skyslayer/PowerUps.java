@@ -7,11 +7,13 @@ import com.badlogic.gdx.math.Rectangle;
 abstract class PowerUps {
 
     public Rectangle boundingbox;
+
     TextureRegion powerUps;
-   float powerUpTimer = 0;
+
+    float powerUpTimer = 0;
+
     float movementspeeds;
 
-    float xPowerup,yPowerup, Wid;
 
     public PowerUps( float PowerupTimer, float movementSpeeds, TextureRegion powerUps, float xPowerup, float yPowerup, float width,
                     float height){
@@ -20,7 +22,6 @@ abstract class PowerUps {
         this.powerUps = powerUps;
         this.movementspeeds = movementSpeeds;
         this.powerUpTimer = PowerupTimer;
-
 
     }
 

@@ -26,25 +26,20 @@ class MenuScreen implements Screen {
     private Camera camera;
     private Viewport viewport;
     private float backgroundmaxscrollingspeed;
-
-
     // Texture untuk Ui dan backgrounds
     private Texture[] backgrounds;
     private Texture background, logo, circle ;
     private float[] backgroundsoffsets = {0};
-
-
     //  Untuk memberikan animasi dan efek pada Texture
     private Stage stage;
     private SpriteBatch batch;
     private int backgroundoffset;
     private Label playLabel, KelompokLabel;
     private Sprite sprite;
-
-
     // Variabel konstan untuk Lebar dan Panjang Screen
     private final int WORLD_WITH = 650;
     private final int WORLD_HEIGHT = 1000;
+
 
     public MenuScreen() {
 
@@ -55,7 +50,9 @@ class MenuScreen implements Screen {
         camera = new OrthographicCamera();
         stage = new Stage(new FitViewport(WORLD_WITH, WORLD_HEIGHT));
         backgroundmaxscrollingspeed = (float)(WORLD_HEIGHT) / 4;
+
         Gdx.input.setInputProcessor(stage);
+
         Skin skin = new Skin(Gdx.files.internal("arcade-ui.json"));
 
 
@@ -64,13 +61,16 @@ class MenuScreen implements Screen {
         playLabel.setSize(190, 30);
         playLabel.setPosition((WORLD_WITH + 230) / 2, ((WORLD_HEIGHT / 5)));
 
+
         // membuat label untuk Button Kelompok
         KelompokLabel = new Label("Kelompok", skin);
         KelompokLabel.setSize(190, 30);
         KelompokLabel.setPosition((WORLD_WITH - 440) / 2, ((WORLD_HEIGHT / 5)));
 
 
+
         viewport = new StretchViewport(WORLD_WITH, WORLD_HEIGHT, camera);
+
 
         // Object untuk gambar
         logo = new Texture("sky1.png");
@@ -81,6 +81,7 @@ class MenuScreen implements Screen {
         // Menginstasikan Array untuk efek backgrounds
         backgrounds = new Texture[1];
         backgrounds[0] = new Texture("bintang02.png");
+
 
         // membuat efek background
         backgroundoffset = 0;
@@ -95,6 +96,7 @@ class MenuScreen implements Screen {
         playButton.setSize(190, 190);
         playButton.setPosition( (WORLD_WITH + 100 )/ 2 ,
                 ((WORLD_HEIGHT / 2) - sprite.getHeight()/2));
+
 
         // Respon input dari user berupa (click, hover)
         playButton.addListener(new ClickListener() {
