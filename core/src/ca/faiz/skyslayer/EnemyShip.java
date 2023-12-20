@@ -37,6 +37,32 @@ class EnemyShip extends Ship {
         }
     }
 
+    @Override
+    public Laser[] fireMoreLasers(){
+        Laser[] morelaser = new Laser[5];
+
+        morelaser[0] = new Laser(laserMovementSpeed, boundingbox.x, boundingbox.y + laserHeight,
+                laserWidth, laserHeight, laserTexture
+        );
+
+        morelaser[1] = new Laser(laserMovementSpeed, boundingbox.x +boundingbox.width, boundingbox.y + laserHeight,
+                laserWidth, laserHeight, laserTexture
+        );
+
+        morelaser[2] = new Laser(laserMovementSpeed, boundingbox.x + boundingbox.width/2, boundingbox.y + laserHeight,
+                laserWidth, laserHeight, laserTexture
+        );
+        morelaser[3] = new Laser(laserMovementSpeed, boundingbox.x + boundingbox.width/2 + 200, boundingbox.y + laserHeight,
+                laserWidth, laserHeight, laserTexture
+        );
+        morelaser[4] = new Laser(laserMovementSpeed, boundingbox.x + boundingbox.width/2 + 100, boundingbox.y + laserHeight,
+                laserWidth, laserHeight, laserTexture
+        );
+
+        timeSinceLastShots = 0;
+        return morelaser;
+    }
+
 
 
     @Override
@@ -45,7 +71,7 @@ class EnemyShip extends Ship {
         shieldRegenInterval += deltaTime;
 
         if (shieldRegenInterval >= regenTimer) {
-            if (shield < 3) {
+            if (shield <= 10) {
                 shield += 1;
                 shieldRegenInterval -= regenTimer;
             }

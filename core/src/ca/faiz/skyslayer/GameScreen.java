@@ -123,7 +123,7 @@ class GameScreen implements Screen {
                 WORLD_WITH/2, (WORLD_HEIGHT /2) - 200, 100, 100, 10, 50,
                 700,
         0.5f , 0.5f);
-        enemyship = new EnemyShip(enemyTexture1, laserEnemyTexture, shieldTexture,10, 0,
+        enemyship = new EnemyShip(enemyTexture1, laserEnemyTexture, shieldTexture,10, 5,
                 WORLD_WITH/2, (WORLD_HEIGHT /2) + 200, 60, 60, 10, 30,
                 400,
                 0.5f, 5f);
@@ -207,8 +207,6 @@ class GameScreen implements Screen {
 
     public void renderPowerUps(float deltaTime){
 
-
-
         if (superspeed.powerUpTimer >= 10f && superspeed.powerUpTimer <= 20f ){
             superspeed.draw(batch);
 
@@ -259,12 +257,30 @@ class GameScreen implements Screen {
         if (enemyship.getShield() >= 1 && enemyship.getShield() <= 10) {
             enemyship.setShieldTexture(enemyShieldTexture);
         }
+
+        if (enemyship.shield <= 0){
+            enemyship.boundingbox.y += WORLD_HEIGHT + 300;
+            enemyship.boundingbox.x =+ WORLD_WITH + 300;
+        }
         if (playership.canFireLaser()){
+            if (playership.shield <= 10){
+                Laser[] lasers = playership.fireMoreLasers();
+                for (Laser laser: lasers){
+                    playerLaserlist.add(laser);
+                }
+            } else {
+            }
             Laser[] lasers = playership.fireLasers();
             for (Laser laser: lasers){
                 playerLaserlist.add(laser);
             }
+
+
+
         }
+
+
+
 
         if (enemyship.canFireLaser()){
             Laser[] lasers = enemyship.fireLasers();
@@ -307,7 +323,7 @@ class GameScreen implements Screen {
 
             if (enemyship.collide(laser.getBoundinbox())){
                 System.out.println(superspeed.powerUpTimer);
-                System.out.println(playership.shield);
+                System.out.println(enemyship.shield);
                 enemyship.takeDamage(2);
                 playerLaserlist.remove(i);
                 i--;

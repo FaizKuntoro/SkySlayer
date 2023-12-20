@@ -46,6 +46,8 @@ abstract class Ship {
         boundingbox.setPosition(boundingbox.x+xChange, boundingbox.y+yChange);
     }
 
+    public abstract Laser[] fireMoreLasers();
+
     public void update(float deltaTime) {
         timeSinceLastShots += deltaTime;
         shieldRegenInterval += deltaTime;
@@ -86,6 +88,7 @@ abstract class Ship {
     }
 
     public abstract Laser[] fireLasers();
+
 
     public void draw(Batch batch) {
         batch.draw(shipTexture, boundingbox.x, boundingbox.y, boundingbox.width, boundingbox.height);

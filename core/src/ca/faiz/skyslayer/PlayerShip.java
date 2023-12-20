@@ -1,6 +1,5 @@
 package ca.faiz.skyslayer;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -55,6 +54,22 @@ class PlayerShip extends Ship {
     }
 
     @Override
+    public Laser[] fireMoreLasers(){
+        Laser[] morelaser = new Laser[2];
+
+        morelaser[0] = new Laser(laserMovementSpeed, boundingbox.x, boundingbox.y + laserHeight,
+                laserWidth, laserHeight, laserTexture
+        );
+
+        morelaser[1] = new Laser(laserMovementSpeed, boundingbox.x +boundingbox.width, boundingbox.y + laserHeight,
+                laserWidth, laserHeight, laserTexture
+        );
+
+        timeSinceLastShots = 0;
+        return morelaser;
+    }
+
+    @Override
     public void update(float deltaTime) {
         timeSinceLastShots += deltaTime;
         shieldRegenInterval += deltaTime;
@@ -73,6 +88,7 @@ class PlayerShip extends Ship {
                 skyslayer.getInstance().setScreen(new DeathScreen());
                 System.out.println("PEpeng");
             }
+
         }
     }
 }
