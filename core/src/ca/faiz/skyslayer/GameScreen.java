@@ -23,7 +23,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import org.w3c.dom.Text;
 
 import java.security.PrivateKey;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.ListIterator;
 
 class GameScreen implements Screen {
@@ -43,7 +46,8 @@ class GameScreen implements Screen {
 
     private TextureAtlas atlas;
     private TextureRegion laserTexture, shipTexture, shieldTexture, laserEnemyTexture, enemyTexture1,
-            shieldTexture1, enemyShieldTexture, damagedShieldTexture, damagedShieldTexture1, damagedShieldTexture2;
+            shieldTexture1, enemyShieldTexture, damagedShieldTexture, damagedShieldTexture1, damagedShieldTexture2
+            , powerUps;
 
     private float[] backgroundsoffsets = {0,0};
     private float backgroundmaxscrollingspeed;
@@ -59,8 +63,12 @@ class GameScreen implements Screen {
     private Ship playership;
     private  Ship enemyship;
 
+    private PowerUps superspeed;
+
     private LinkedList<Laser> playerLaserlist;
     private LinkedList<Laser> enemyLaserlist;
+    private List<PowerUps> powerUpsList = new ArrayList<>();
+    private LinkedList<SuperSpeed> powerUpsLinkedList;
 
 
     public GameScreen() {
@@ -77,6 +85,10 @@ class GameScreen implements Screen {
         damagedShieldTexture = atlas.findRegion("playerShip2_damage1");
         damagedShieldTexture1 = atlas.findRegion("playerShip2_damage2");
         damagedShieldTexture2 = atlas.findRegion("playerShip2_damage3");
+        powerUps = atlas.findRegion("bold_silver");
+
+        superspeed = new SuperSpeed(5f,100, powerUps,WORLD_WITH / 2 - 200, WORLD_HEIGHT  ,
+                30, 50);
 
         stage = new Stage();
         batch = new SpriteBatch();
@@ -145,6 +157,7 @@ class GameScreen implements Screen {
 
         playership.update(deltaTime);
         enemyship.update(deltaTime);
+        superspeed.update(deltaTime);
 
 
         input(deltaTime);
@@ -158,6 +171,7 @@ class GameScreen implements Screen {
             backgroundoffset = 0;
         }
 
+        renderPowerUps(deltaTime);
         collide(deltaTime);
         renderLasers(deltaTime);
 
@@ -191,7 +205,41 @@ class GameScreen implements Screen {
 
     }
 
+    public void renderPowerUps(float deltaTime){
+
+
+
+        if (superspeed.powerUpTimer >= 10f && superspeed.powerUpTimer <= 20f ){
+            superspeed.draw(batch);
+
+            superspeed.boundingbox.y -= superspeed.movementspeeds * deltaTime;
+
+            } else if (superspeed.powerUpTimer >= 15f && superspeed.powerUpTimer <= 20f ) {
+
+        }
+
+        if (playership.collide(superspeed.boundingbox)) {
+            superspeed.powerUpTimer = 0f;
+            System.out.println("got em");
+            superspeed.boundingbox.y =+ 3000;
+
+
+            playership.laserAttackSpeed -= 0.4f;
+        }
+
+        if (superspeed.powerUpTimer >= 5f && playership.laserAttackSpeed < 0.5f ){
+            playership.laserAttackSpeed += 0.4f;
+            superspeed.powerUpTimer = 5f;
+            superspeed.boundingbox.y = WORLD_HEIGHT;
+            superspeed.boundingbox.x = +500;
+
+        }
+
+
+    }
+
     private void renderLasers(float deltaTime){
+
         if (playership.getShield() >= 11 && playership.getShield() <= 15) {
             playership.setShieldTexture(shieldTexture);
         } else if (playership.getShield() >= 16 && playership.getShield() <=20) {
@@ -254,7 +302,8 @@ class GameScreen implements Screen {
 
 
             if (enemyship.collide(laser.getBoundinbox())){
-                System.out.println(playership.shield);
+                System.out.println(superspeed.powerUpTimer);
+                System.out.println(playership.laserAttackSpeed);
                 enemyship.takeDamage(2);
                 playerLaserlist.remove(i);
                 i--;

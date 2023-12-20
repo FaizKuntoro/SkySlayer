@@ -12,23 +12,16 @@ public class Laser {
     Rectangle boundingbox;
 
 
-
-
-
     public Laser(float movementSpeed, float xLaser, float yLaser, float width, float height, TextureRegion textureRegion) {
         this.movementSpeed = movementSpeed;
         this.boundingbox = new Rectangle(xLaser - width / 2, yLaser - height/2,width, height);
         this.textureRegion = textureRegion;
-
-
     }
-
 
 
     public void draw(Batch batch) {
             batch.draw(textureRegion, boundingbox.x - boundingbox.width/2, boundingbox.y, boundingbox.width, boundingbox.height);
         }
-
 
 
     public Rectangle getBoundinbox(){

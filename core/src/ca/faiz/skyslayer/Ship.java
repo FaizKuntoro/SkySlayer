@@ -39,7 +39,6 @@ abstract class Ship {
         this.shield = shield;
         this.regenTimer = regenTimer;
         this.boundingbox = new Rectangle(xCentre - width / 2, yCentre - height / 2, width, height);
-        this.damagedShipTexture = damagedShipTexture;
 
     }
 
