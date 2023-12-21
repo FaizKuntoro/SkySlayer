@@ -5,15 +5,29 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 class PlayerShip extends Ship {
 
-    TextureRegion damagedShieldTexture;
+    private static PlayerShip instance;
 
 
-    public PlayerShip(TextureRegion shipTexture, TextureRegion LaserTexture, TextureRegion ShieldTexture, TextureRegion damagedShipTexture,
+
+    private PlayerShip(TextureRegion shipTexture, TextureRegion LaserTexture, TextureRegion ShieldTexture, TextureRegion damagedShipTexture,
                       float movementspeed, int shield, float xCentre, float yCentre, float width, float height,
                       float laserWidth, float laserHeight, float laserMovementSpeed, float laserAttackSpeed, float regenTimer) {
         super(shipTexture, LaserTexture, ShieldTexture, movementspeed, shield, xCentre, yCentre,
                 width, height, laserWidth, laserHeight, laserMovementSpeed, laserAttackSpeed, regenTimer);
 
+    }
+
+    public static PlayerShip getInstance(TextureRegion shipTexture, TextureRegion laserTexture, TextureRegion shieldTexture,
+                                         TextureRegion damagedShipTexture, float movementSpeed, int shield, float xCentre,
+                                         float yCentre, float width, float height, float laserWidth, float laserHeight,
+                                         float laserMovementSpeed, float laserAttackSpeed, float regenTimer) {
+        // Lazy initialization: create the instance only if it hasn't been created yet
+        if (instance == null) {
+            instance = new PlayerShip(shipTexture, laserTexture, shieldTexture, damagedShipTexture, movementSpeed,
+                    shield, xCentre, yCentre, width, height, laserWidth, laserHeight, laserMovementSpeed,
+                    laserAttackSpeed, regenTimer);
+        }
+        return instance;
     }
 
 
@@ -70,9 +84,6 @@ class PlayerShip extends Ship {
         morelaser[4] = new Laser(laserMovementSpeed, boundingbox.x +(boundingbox.width)*3/4, boundingbox.y+5 + laserHeight,
                 laserWidth, laserHeight, laserTexture
         );
-
-
-
 
         timeSinceLastShots = 0;
         return morelaser;

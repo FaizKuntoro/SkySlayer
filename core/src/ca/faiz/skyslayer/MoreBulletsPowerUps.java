@@ -3,9 +3,9 @@ package ca.faiz.skyslayer;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class MoreBullets extends PowerUps{
+public class MoreBulletsPowerUps extends PowerUps{
 
-    public MoreBullets(float PowerupTimer, float movementSpeeds, TextureRegion powerUps, float xPowerup, float yPowerup, float width, float height) {
+    public MoreBulletsPowerUps(float PowerupTimer, float movementSpeeds, TextureRegion powerUps, float xPowerup, float yPowerup, float width, float height) {
         super(PowerupTimer, movementSpeeds, powerUps, xPowerup, yPowerup, width, height);
     }
 

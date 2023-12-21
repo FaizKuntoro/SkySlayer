@@ -77,9 +77,9 @@ class GameScreen implements Screen {
         text123 = new Texture("back.png");
 
 
-       superspeed = new SuperSpeed(5f,100, powerUps,WORLD_WITH / 2 - 200, WORLD_HEIGHT  ,
+       superspeed = new SuperSpeedPowerUps(5f,100, powerUps,WORLD_WITH / 2 - 200, WORLD_HEIGHT  ,
                 30, 50);
-       morebullets = new MoreBullets(5f,100, powerUps1,WORLD_WITH / 2 + 200 , WORLD_HEIGHT  ,
+       morebullets = new MoreBulletsPowerUps(5f,100, powerUps1,WORLD_WITH / 2 + 200 , WORLD_HEIGHT  ,
                 30, 50);
 
 
@@ -113,7 +113,7 @@ class GameScreen implements Screen {
             }
         });
 
-        playership = new PlayerShip(shipTexture , laserTexture, shieldTexture, damagedShieldTexture, 300, 5,
+        playership = PlayerShip.getInstance(shipTexture , laserTexture, shieldTexture, damagedShieldTexture, 300, 5,
                 WORLD_WITH/2, (WORLD_HEIGHT /2) - 200, 100, 100, 10, 50,
                 1000,
         0.5f , 0.5f);
