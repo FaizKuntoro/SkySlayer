@@ -26,20 +26,22 @@ class MenuScreen implements Screen {
     private Camera camera;
     private Viewport viewport;
     private float backgroundmaxscrollingspeed;
+
     // Texture untuk Ui dan backgrounds
     private Texture[] backgrounds;
     private Texture background, logo, circle ;
     private float[] backgroundsoffsets = {0};
+
     //  Untuk memberikan animasi dan efek pada Texture
     private Stage stage;
     private SpriteBatch batch;
     private int backgroundoffset;
     private Label playLabel, KelompokLabel;
     private Sprite sprite;
+
     // Variabel konstan untuk Lebar dan Panjang Screen
     private final int WORLD_WITH = 650;
     private final int WORLD_HEIGHT = 1000;
-
 
     public MenuScreen() {
 
