@@ -27,6 +27,10 @@ import java.util.List;
 
 class GameScreen implements Screen {
 
+    EnemyShipGroup enemyShipGroup;
+
+    EnemyShipGroup enemyShipGroup2 = new EnemyShipGroup();
+
 
     private TextureRegion textureRegion;
     //Instansi kelas untuk kamera dan viewport
@@ -38,6 +42,7 @@ class GameScreen implements Screen {
     private Texture backgroundgame;
 
     private final float TOUCH_MOVEMENT_THRESHOLD = 9f;
+
 
 
     private TextureAtlas atlas;
@@ -53,16 +58,22 @@ class GameScreen implements Screen {
     private final int WORLD_WITH = 650;
     private final int WORLD_HEIGHT = 1000;
     private Ship playership;
-    private  Ship enemyship;
+    private  Ship enemyship, enemyship2;
     private PowerUps superspeed, morebullets;
     private LinkedList<Laser> playerLaserlist;
     private LinkedList<Laser> enemyLaserlist;
+
+    private LinkedList<EnemyShip> enemypattern;
 
     public Texture text123;
 
 
 
     public GameScreen() {
+
+
+
+
         atlas = new TextureAtlas("gamescreenobject.atlas");
         laserTexture = atlas.findRegion("laserBlue14b");
         laserEnemyTexture = atlas.findRegion("laserRed14");
@@ -120,8 +131,13 @@ class GameScreen implements Screen {
                 WORLD_WITH/2, (WORLD_HEIGHT /2) - 200, 100, 100, 10, 50,
                 1000,
         0.5f , 0.5f);
-        enemyship = new EnemyShip(enemyTexture1, laserEnemyTexture, shieldTexture,10, 5,
+        enemyship = new EnemyShip(enemyTexture1, laserEnemyTexture, shieldTexture,1, 5,
                 WORLD_WITH/2, (WORLD_HEIGHT /2) + 200, 60, 60, 10, 30,
+                400,
+                0.5f, 5f);
+
+        enemyship2 = new EnemyShip(enemyTexture1, laserEnemyTexture, shieldTexture,1, 5,
+                WORLD_WITH/2 + 300, (WORLD_HEIGHT /2) + 200, 60, 60, 10, 30,
                 400,
                 0.5f, 5f);
 
@@ -159,9 +175,22 @@ class GameScreen implements Screen {
         morebullets.update(deltaTime);
 
 
+
+
+
+
+        enemyShipGroup2.spawnHorizontalPattern(enemyTexture1, laserEnemyTexture, shieldTexture,1, 5,
+                WORLD_WITH/2, (WORLD_HEIGHT /2) + 200, 60, 60, 10, 30,
+                400,
+                0.5f, 5f,10);
+
         input(deltaTime);
+
         playership.draw(batch);
         enemyship.draw(batch);
+
+        enemyShipGroup2.draw(batch);
+
 
 
 
@@ -182,10 +211,13 @@ class GameScreen implements Screen {
     private void moveEnemies(float deltaTime){
 
         float leftLimit, rightLimit, upLimit, downLimit;
+
         leftLimit = -enemyship.boundingbox.x;
         downLimit = -enemyship.boundingbox.y;
         rightLimit = WORLD_WITH - enemyship.boundingbox.x - enemyship.boundingbox.width;
         upLimit = WORLD_HEIGHT/ - enemyship.boundingbox.y - enemyship.boundingbox.height;
+
+        //scale to the maximum speed of the ship
 
 
 
@@ -344,6 +376,20 @@ class GameScreen implements Screen {
 
         if (enemyship.getShield() >= 1 && enemyship.getShield() <= 10) {
             enemyship.setShieldTexture(enemyShieldTexture);
+        }
+
+        if (playership.canFireLaser()){
+            if (canfiremore == 1){
+                Laser[] morelasers = playership.fireMoreLasers();
+                for (Laser laser: morelasers) {
+                    playerLaserlist.add(laser);
+                }
+            } else if ( canfiremore == 0){
+                Laser[] lasers = playership.fireLasers();
+                for (Laser laser: lasers){
+                    playerLaserlist.add(laser);
+                }}
+
         }
 
         if (playership.canFireLaser()){

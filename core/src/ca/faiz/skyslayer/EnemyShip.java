@@ -32,10 +32,13 @@ class EnemyShip extends Ship {
     @Override
     public void draw(Batch batch) {
         batch.draw(shipTexture, boundingbox.x, boundingbox.y, boundingbox.width, boundingbox.height);
+
         if (shield > 0 && shield < 3) {
             batch.draw(shieldTexture, boundingbox.x, boundingbox.y, boundingbox.width, boundingbox.height);
         }
     }
+
+
 
     @Override
     public Laser[] fireMoreLasers(){

@@ -107,6 +107,7 @@ class PlayerShip extends Ship {
             if (shield <= -20){
                 skyslayer.getInstance().setScreen(new DeathScreen());
                 System.out.println("mati!");
+                instance = null;
             }
 
         }
