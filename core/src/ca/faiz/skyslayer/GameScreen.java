@@ -8,6 +8,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -28,6 +29,8 @@ import java.util.ListIterator;
 
 class GameScreen implements Screen {
 
+    BitmapFont font;
+    float hudVerticalMargin, hudLeftX, hudRightX, hudCentreX, hudRow1Y, hudRow2Y, hudSectionWidth;
 
     private TextureRegion textureRegion;
     //Instansi kelas untuk kamera dan viewport
@@ -59,7 +62,9 @@ class GameScreen implements Screen {
     private final int WORLD_WITH = 650;
     private final int WORLD_HEIGHT = 1000;
     private Ship playership;
-    private PowerUps superspeed, morebullets;
+    private SuperSpeedPowerUps superspeed;
+
+    private PowerUps morebullets;
     private LinkedList<Laser> playerLaserlist;
     private LinkedList<Laser> enemyLaserlist;
 
@@ -90,8 +95,16 @@ class GameScreen implements Screen {
         text123 = new Texture("back.png");
 
 
-       superspeed = new SuperSpeedPowerUps(5f,100, powerUps,WORLD_WITH / 2 - 200, WORLD_HEIGHT  ,
-                30, 50);
+        superspeed = new SuperSpeedPowerUps.Builder()
+                .setPowerupTimer(10.0f)
+                .setMovementSpeed(100)
+                .setPowerUps(powerUps)
+                .setXPowerup(WORLD_WITH / 2 )
+                .setYPowerup(WORLD_HEIGHT )
+                .setWidth(30)
+                .setHeight(50)
+                .build();
+
        morebullets = new MoreBulletsPowerUps(5f,100, powerUps1,WORLD_WITH / 2 + 200 , WORLD_HEIGHT  ,
                 30, 50);
 
@@ -419,8 +432,8 @@ class GameScreen implements Screen {
 
             laser.draw(batch);
 
-            System.out.println(morebullets.powerUpTimer);
-            System.out.println(canfiremore)      ;
+            System.out.println(stagetimer);
+            System.out.println(canfiremore);
 
 
             laser.boundingbox.y += laser.movementSpeed * deltaTime;
@@ -452,7 +465,6 @@ class GameScreen implements Screen {
             ListIterator<EnemyShip> enemyShipListIterator = enemyShipList.listIterator();
             while (enemyShipListIterator.hasNext()) {
                 EnemyShip enemyShip = enemyShipListIterator.next();
-
                 if (enemyShip.collide(laser.boundingbox)) {
                     if (enemyShip.shield <= 0){
                         enemyShipListIterator.remove();

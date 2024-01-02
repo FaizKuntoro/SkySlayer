@@ -174,16 +174,13 @@ class WinScreen implements Screen {
 
     @Override
     public void dispose() {
-        // Dispose of resources to prevent memory leaks
 
-        // Dispose of textures
         background.dispose();
         kelompokbg.dispose();
         for (Texture texture : backgrounds) {
             texture.dispose();
         }
 
-        // Dispose of sprite batch and stage
         batch.dispose();
         stage.dispose();
     }
