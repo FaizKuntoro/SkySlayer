@@ -67,6 +67,8 @@ class GameScreen implements Screen {
 
     private LinkedList<EnemyShip> enemyShipList;
 
+    float stagetimer = 0;
+
 
 
 
@@ -180,6 +182,7 @@ class GameScreen implements Screen {
         input(deltaTime);
         playership.draw(batch);
         enemyShipGroup.draw(batch);
+        stageTimer(deltaTime);
 
 
 
@@ -197,6 +200,7 @@ class GameScreen implements Screen {
         batch.end();
 
     }
+
 
     private void moveEnemies(EnemyShip enemyship, float deltaTime){
 
@@ -278,9 +282,6 @@ class GameScreen implements Screen {
         }
     }
 
-    private void renderExplosion(float deltaTime){
-
-    }
 
     private void spawnEnemyShip(float deltaTime){
 
@@ -296,6 +297,13 @@ class GameScreen implements Screen {
 
 
 
+    }
+
+    private void stageTimer(float deltaTime){
+        stagetimer += deltaTime;
+        if (stagetimer >= 20){
+            skyslayer.getInstance().setScreen(new WinScreen());
+        }
     }
 
     public void renderPowerUps(float deltaTime){
@@ -446,6 +454,9 @@ class GameScreen implements Screen {
                 EnemyShip enemyShip = enemyShipListIterator.next();
 
                 if (enemyShip.collide(laser.boundingbox)) {
+                    if (enemyShip.shield <= 0){
+                        enemyShipListIterator.remove();
+                    }
                     enemyShip.takeDamage(1);
                     laserListIterator.remove();
                     break;
