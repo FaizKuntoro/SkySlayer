@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
 import java.util.ArrayList;
-import java.util.List;
 
 abstract class Ship {
 
@@ -42,26 +41,6 @@ abstract class Ship {
         this.regenTimer = regenTimer;
         this.boundingbox = new Rectangle(xCentre - width / 2, yCentre - height / 2, width, height);
 
-    }
-
-    public void batchDrawEnemies(Batch batch) {
-        List<EnemyShip> enemyShips = new ArrayList<>();
-
-        // Create and add EnemyShip instances to the list
-        for (int i = 0; i < 5; i++) {
-            EnemyShip enemyShip = new EnemyShip(shipTexture, laserTexture, shieldTexture, 1, 5,
-                    350, 700, 60, 60, 10, 30,
-                    400,
-                    0.5f, 5f);
-
-
-            enemyShips.add(enemyShip);
-        }
-
-        // Draw all EnemyShip instances in the list
-        for (EnemyShip enemyShip : enemyShips) {
-            enemyShip.draw(batch); // Assuming there is a draw method in your EnemyShip class
-        }
     }
 
     public void translate(float xChange, float yChange) {
@@ -119,6 +98,9 @@ abstract class Ship {
         if (shield > 0) {
             batch.draw(shieldTexture, boundingbox.x, boundingbox.y, boundingbox.width, boundingbox.height);
         }
+    }
+
+    public void EnemyShipGroup() {
     }
 
     public int getShield(){

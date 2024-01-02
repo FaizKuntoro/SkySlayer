@@ -100,6 +100,7 @@ class PlayerShip extends Ship {
                 shieldRegenInterval -= regenTimer;
             }
 
+
             if (shield > 20){
                 shield = 20;
             }
