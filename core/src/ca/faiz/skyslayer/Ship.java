@@ -5,8 +5,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
-import java.util.ArrayList;
-
 abstract class Ship {
 
     float movementspeed;
@@ -75,6 +73,10 @@ abstract class Ship {
 
         }
     }
+
+    public float getMovementspeed(){
+        return movementspeed;
+    };
 
 
 

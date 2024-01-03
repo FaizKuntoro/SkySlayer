@@ -169,4 +169,10 @@ class EnemyShip extends Ship {
             }
         }
     }
+
+    @Override
+    public float getMovementspeed() {
+        return super.getMovementspeed();
+    }
+
 }
