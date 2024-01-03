@@ -49,7 +49,6 @@ class EnemyShip extends Ship {
         enemyShips = new ArrayList<>();
     }
 
-    // Spawn a wing pattern of enemy ships
     public void spawnWingPattern(TextureRegion shipTexture, TextureRegion laserTexture,
                                  TextureRegion shieldTexture, int movementSpeed, int shield,
                                  float x, float y, float width, float height,
@@ -68,7 +67,6 @@ class EnemyShip extends Ship {
         enemyShips.add(rightShip);
     }
 
-    // Spawn a horizontal pattern of enemy ships
     public void spawnHorizontalPattern(TextureRegion shipTexture, TextureRegion laserTexture,
                                        TextureRegion shieldTexture, int movementSpeed, int shield,
                                        float x, float y, float width, float height,
@@ -85,7 +83,6 @@ class EnemyShip extends Ship {
         }
     }
 
-    // Spawn a vertical pattern of enemy ships
     public void spawnVerticalPattern(TextureRegion shipTexture, TextureRegion laserTexture,
                                      TextureRegion shieldTexture, int movementSpeed, int shield,
                                      float x, float y, float width, float height,

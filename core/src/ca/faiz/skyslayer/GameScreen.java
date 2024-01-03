@@ -64,7 +64,6 @@ class GameScreen implements Screen {
     private Ship playership;
     private SuperSpeedPowerUps superspeed;
 
-    private PowerUps morebullets;
     private LinkedList<Laser> playerLaserlist;
     private LinkedList<Laser> enemyLaserlist;
 
@@ -73,6 +72,8 @@ class GameScreen implements Screen {
     private LinkedList<EnemyShip> enemyShipList;
 
     float stagetimer = 0;
+
+    MoreBulletsPowerUps morebullets;
 
 
 
@@ -105,15 +106,21 @@ class GameScreen implements Screen {
                 .setHeight(50)
                 .build();
 
-       morebullets = new MoreBulletsPowerUps(5f,100, powerUps1,WORLD_WITH / 2 + 200 , WORLD_HEIGHT  ,
-                30, 50);
+
+
+       morebullets = MoreBulletsPowerUps.MoreBulletsPowerUpsFactory.createMoreBulletsPowerUps(
+               5f,100, powerUps1,WORLD_WITH / 2 + 200 , WORLD_HEIGHT  ,
+               30, 50);
 
 
 
-        stage = new Stage();
-        batch = new SpriteBatch();
-        camera = new OrthographicCamera();
-        viewport = new StretchViewport(WORLD_WITH, WORLD_HEIGHT, camera);
+
+
+
+       stage = new Stage();
+       batch = new SpriteBatch();
+       camera = new OrthographicCamera();
+       viewport = new StretchViewport(WORLD_WITH, WORLD_HEIGHT, camera);
 
         backgroundgame = new Texture("backgroundgame.png");
 
